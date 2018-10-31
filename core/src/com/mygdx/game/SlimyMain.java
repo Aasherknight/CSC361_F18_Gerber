@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 
 public class SlimyMain implements ApplicationListener
@@ -19,6 +20,9 @@ public class SlimyMain implements ApplicationListener
 	{
 		//Debug mode
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
+		//load assets
+		Assets.instance.init(new AssetManager());
+		
 		//Initialize the controller and renderer
 		worldController = new WorldController();
 		worldRenderer = new WorldRenderer(worldController);
@@ -64,6 +68,7 @@ public class SlimyMain implements ApplicationListener
 	public void dispose()
 	{
 		worldRenderer.dispose();
+		Assets.instance.dispose();
 	}
 			
 }

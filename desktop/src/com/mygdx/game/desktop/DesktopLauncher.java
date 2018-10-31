@@ -4,7 +4,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
-import com.mygdx.game.CSC361_F18_Gerber;
+import com.mygdx.game.SlimyMain;
 
 public class DesktopLauncher 
 {
@@ -28,7 +28,7 @@ public class DesktopLauncher
 		config.width = 800;
 		config.height = 480;
 		
-		new LwjglApplication(new CSC361_F18_Gerber(), config);
+		new LwjglApplication(new SlimyMain(), config);
 		
 	}
 }

@@ -5,6 +5,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.util.CameraHelper;
 
 /**
@@ -49,7 +52,28 @@ public class WorldController extends InputAdapter
 	{
 		//array of 5 sprites
 		testSprites = new Sprite[5];
+		//list of texture regions
+		Array<TextureRegion> regions = new Array<TextureRegion>();
+		regions.add(Assets.instance.slimy.slimy);
+		regions.add(Assets.instance.imp.imp);
+		regions.add(Assets.instance.jelly.jelly);
+		regions.add(Assets.instance.dividing_jelly.dividing_jelly);
 		
+		//create new sprites using the random texture region
+		for(int i = 0; i < testSprites.length; i++)
+		{
+			Sprite spr = new Sprite(regions.random());
+			spr.setSize(1, 1);
+			//set origin for sprites center
+			spr.setOrigin(spr.getWidth()/2.0f, spr.getHeight()/2.0f);
+			//calculate random position for sprite
+			float ranX = MathUtils.random(-2.0f, 2.0f);
+			float ranY = MathUtils.random(-2.0f, 2.0f);
+			spr.setPosition(ranX, ranY);
+			
+			//put the sprite we made into array
+			testSprites[i] = spr;
+		}
 		//select the first sprite
 		selectedSprite = 0;
 	}
