@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Disposable;
 
 /**
  * Displays the game world to the player
@@ -9,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  *
  */
 
-public class WorldRenderer
+public class WorldRenderer implements Disposable
 {
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
@@ -33,5 +34,12 @@ public class WorldRenderer
 	public void resize(int width, int height)
 	{
 		//TODO
+	}
+
+	@Override
+	public void dispose()
+	{
+		// TODO Auto-generated method stub
+		
 	}
 }
