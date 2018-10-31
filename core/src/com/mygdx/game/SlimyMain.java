@@ -61,6 +61,7 @@ public class SlimyMain implements ApplicationListener
 	@Override
 	public void resume()
 	{
+		Assets.instance.init(new AssetManager());
 		paused = false;
 	}
 

@@ -77,7 +77,7 @@ public class Assets implements Disposable, AssetErrorListener
 		
 		public AssetSlimy(TextureAtlas atlas)
 		{
-			slimy = atlas.findRegion("slimy.png");
+			slimy = atlas.findRegion("slimy");
 		}
 	}
 	
@@ -87,7 +87,7 @@ public class Assets implements Disposable, AssetErrorListener
 		
 		public AssetImp(TextureAtlas atlas)
 		{
-			imp = atlas.findRegion("imp_stand.png");
+			imp = atlas.findRegion("imp_stand");
 		}
 	}
 	
@@ -97,7 +97,7 @@ public class Assets implements Disposable, AssetErrorListener
 		
 		public AssetJelly(TextureAtlas atlas)
 		{
-			jelly = atlas.findRegion("jelly.png");
+			jelly = atlas.findRegion("jelly");
 		}
 	}
 	
@@ -107,7 +107,7 @@ public class Assets implements Disposable, AssetErrorListener
 		
 		public AssetDividingJelly(TextureAtlas atlas)
 		{
-			dividing_jelly = atlas.findRegion("dividingjelly.png");
+			dividing_jelly = atlas.findRegion("dividingjelly");
 		}
 	}
 }
