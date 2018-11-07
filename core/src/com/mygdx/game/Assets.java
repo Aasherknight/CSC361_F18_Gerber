@@ -53,6 +53,7 @@ public class Assets implements Disposable, AssetErrorListener
 		imp = new AssetImp(atlas);
 		jelly = new AssetJelly(atlas);
 		dividing_jelly = new AssetDividingJelly(atlas);
+		cave = new AssetCave(atlas);
 	}
 	
 	public void error(String filename, Class type, Throwable throwable)
