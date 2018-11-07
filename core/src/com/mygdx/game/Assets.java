@@ -23,6 +23,7 @@ public class Assets implements Disposable, AssetErrorListener
 	public AssetImp imp;
 	public AssetJelly jelly;
 	public AssetDividingJelly dividing_jelly;
+	public AssetCave cave;
 	
 	private Assets() {}
 	
@@ -108,6 +109,24 @@ public class Assets implements Disposable, AssetErrorListener
 		public AssetDividingJelly(TextureAtlas atlas)
 		{
 			dividing_jelly = atlas.findRegion("dividingjelly");
+		}
+	}
+	
+	public class AssetCave
+	{
+		public final AtlasRegion backdrop;
+		public final AtlasRegion largeRocks;
+		public final AtlasRegion smallRocks;
+		public final AtlasRegion edge;
+		public final AtlasRegion middle;
+		
+		public AssetCave(TextureAtlas atlas)
+		{
+			edge = atlas.findRegion("CaveFloorEdge");
+			middle = atlas.findRegion("CaveFloor");
+			backdrop = atlas.findRegion("CaveBackdrop");
+			largeRocks = atlas.findRegion("CaveRocks1");
+			smallRocks = atlas.findRegion("CaveRocks2");
 		}
 	}
 }
