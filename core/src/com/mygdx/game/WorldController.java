@@ -92,7 +92,7 @@ public class WorldController extends InputAdapter
 	{
 		if(Gdx.app.getType() != ApplicationType.Desktop) return;
 		
-		float sprMoveSpeed = 56*deltaTime;
+		float sprMoveSpeed = 5*deltaTime;
 		
 		if (Gdx.input.isKeyPressed(Keys.A))
 			moveSelectedSprite(-sprMoveSpeed, 0);

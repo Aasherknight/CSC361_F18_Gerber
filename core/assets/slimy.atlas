@@ -1,33 +1,68 @@
 
 slimy.png
-size: 1024,256
+size: 1024,512
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+CaveBackdrop
+  rotate: false
+  xy: 2, 262
+  size: 320, 200
+  orig: 320, 200
+  offset: 0, 0
+  index: -1
+CaveFloor
+  rotate: false
+  xy: 324, 132
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+CaveFloorEdge
+  rotate: false
+  xy: 646, 334
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+CaveRocks1
+  rotate: false
+  xy: 2, 60
+  size: 320, 200
+  orig: 320, 200
+  offset: 0, 0
+  index: -1
+CaveRocks2
+  rotate: false
+  xy: 324, 262
+  size: 320, 200
+  orig: 320, 200
+  offset: 0, 0
+  index: -1
 dividingjelly
   rotate: false
-  xy: 2, 2
+  xy: 454, 132
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 imp_stand
   rotate: false
-  xy: 132, 2
+  xy: 776, 334
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 jelly
   rotate: false
-  xy: 262, 2
+  xy: 324, 2
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 slimy
   rotate: false
-  xy: 392, 2
+  xy: 454, 2
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
