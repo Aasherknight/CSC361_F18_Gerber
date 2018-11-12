@@ -8,25 +8,32 @@ public class Backdrop extends AbstractGameObject
 {
 	private TextureRegion backdrop;
 	private float length;
+	private float height;
 
-	public Backdrop(float length)
+	public Backdrop(float length, float height)
 	{
 		this.length = length;
+		this.height = height;
+		System.out.println("length: " + length + ";height: " + height);
+		
 		init();
 	}
 	
 	private void init()
 	{
-		dimension.set(length*10,3);
+		dimension.set(length,height);
 		
 		backdrop = Assets.instance.cave.backdrop;
+		
+		origin.x = -dimension.x/2;
+		origin.y = -dimension.y/2;
 	}
 	
 	@Override
 	public void render(SpriteBatch batch)
 	{
 		TextureRegion reg = backdrop;
-		batch.draw(reg.getTexture(), position.x + origin.x, position.y + origin.y, 
+		batch.draw(reg.getTexture(), origin.x, origin.y, 
 				origin.x, origin.y, dimension.x, dimension.y, scale.x, 
 				scale.y, rotation, reg.getRegionX(), reg.getRegionY(), 
 				reg.getRegionWidth(), reg.getRegionHeight(), false, false);

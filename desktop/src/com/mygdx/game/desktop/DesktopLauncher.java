@@ -25,8 +25,8 @@ public class DesktopLauncher
 		
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.title = "Slimy";
-		config.width = 800;
-		config.height = 480;
+		config.width = 640;
+		config.height = 400;
 		
 		new LwjglApplication(new SlimyMain(), config);
 		

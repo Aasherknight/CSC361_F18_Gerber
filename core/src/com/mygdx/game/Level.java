@@ -104,6 +104,9 @@ public class Level
 						ground.get(ground.size-1).increaseLength(1);
 					}
 				}
+				else if(BLOCK_TYPE.JELLY.sameColor(currentPixel))
+				{
+				}
 				else if(BLOCK_TYPE.PLAYER_SPAWNPOINT.sameColor(currentPixel))
 				{
 				}
@@ -129,7 +132,7 @@ public class Level
 		}
 		
 		//decoration
-		backdrop = new Backdrop(pixmap.getWidth());
+		backdrop = new Backdrop(pixmap.getWidth(),pixmap.getHeight());
 		
 		//free memory
 		pixmap.dispose();
