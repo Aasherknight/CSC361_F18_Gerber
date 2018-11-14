@@ -76,10 +76,12 @@ public class Assets implements Disposable, AssetErrorListener
 	public class AssetSlimy
 	{
 		public final AtlasRegion slimy;
+		public final AtlasRegion redSlimy;
 		
 		public AssetSlimy(TextureAtlas atlas)
 		{
 			slimy = atlas.findRegion("slimy");
+			redSlimy = atlas.findRegion("redSlimy");
 		}
 	}
 	

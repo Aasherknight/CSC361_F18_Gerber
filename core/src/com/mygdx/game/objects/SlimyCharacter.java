@@ -15,7 +15,7 @@ public class SlimyCharacter extends AbstractGameObject
 	
 	public enum JUMP_STATE {GROUNDED, FALLING, JUMPING}
 	
-	private TextureRegion reg;
+	private TextureRegion body;
 	
 	public VIEW_DIRECTION viewDirection;
 	public JUMP_STATE jumpState;
@@ -31,7 +31,7 @@ public class SlimyCharacter extends AbstractGameObject
 	{
 		dimension.set(1,1);
 		
-		reg = Assets.instance.slimy.slimy;
+		body = Assets.instance.slimy.slimy;
 		
 		//center image on game object
 		origin.set(dimension.x/2, dimension.y/2);
@@ -40,9 +40,9 @@ public class SlimyCharacter extends AbstractGameObject
 		bounds.set(0,0,dimension.x,dimension.y);
 		
 		//set physics
-//		terminalVelocity.set(3.0f,4.0f);
-//		friction.set(12.0f,0.0f);
-//		acceleration.set(0.0f, -25.0f);
+		terminalVelocity.set(3.0f,4.0f);
+		friction.set(12.0f,0.0f);
+		acceleration.set(0.0f, -25.0f);
 		
 		//view direction
 		viewDirection = VIEW_DIRECTION.RIGHT;
@@ -65,8 +65,18 @@ public class SlimyCharacter extends AbstractGameObject
 	
 	@Override
 	public void render(SpriteBatch batch) {
-		// TODO Auto-generated method stub
+		TextureRegion reg = null;
 		
+		if(isRed())
+			body = Assets.instance.slimy.redSlimy;
+		else
+			body = Assets.instance.slimy.slimy;
+		
+		reg = body;
+		batch.draw(reg.getTexture(), position.x, position.y, origin.x, origin.y,
+			dimension.x, dimension.y, scale.x, scale.y, rotation,
+			reg.getRegionX(), reg.getRegionY(), reg.getRegionWidth(), reg.getRegionHeight(),
+			viewDirection == VIEW_DIRECTION.LEFT, false);
 	}
 
 }

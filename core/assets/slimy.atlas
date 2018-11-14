@@ -60,9 +60,16 @@ jelly
   orig: 128, 128
   offset: 0, 0
   index: -1
-slimy
+redSlimy
   rotate: false
   xy: 392, 2
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+slimy
+  rotate: false
+  xy: 522, 2
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
