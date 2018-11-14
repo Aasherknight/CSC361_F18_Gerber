@@ -2,6 +2,7 @@ package com.mygdx.game.objects;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.mygdx.game.Assets;
 
 public class SlimyCharacter extends AbstractGameObject
@@ -54,13 +55,55 @@ public class SlimyCharacter extends AbstractGameObject
 		timeRed = 0;
 	}
 	
-	public void jump() {};
+	public void jump(boolean jumpKeyPressed) 
+	{
+		switch(jumpState)
+		{
+			case GROUNDED:
+				if(jumpKeyPressed)
+				{
+					currentJump = JUMP_POWER;
+					jumpState = JUMP_STATE.JUMPING;
+				}
+				break;
+			default:
+				break;
+		}
+	}
 	
 	public void setRed() {};
 	
 	public boolean isRed() 
 	{
 		return timeRed==0 ? false : true;
+	}
+	
+	@Override
+	public void update(float deltaTime)
+	{
+		super.update(deltaTime);
+		if(velocity.x < 0)
+			viewDirection = VIEW_DIRECTION.LEFT;
+		else
+			viewDirection = VIEW_DIRECTION.RIGHT;
+		
+		timeRed = MathUtils.clamp(timeRed - deltaTime, 0, 999);
+	}
+	
+	@Override
+	public void updateMotionY(float deltaTime)
+	{
+		
+		if(jumpState!=JUMP_STATE.GROUNDED)
+		{
+			currentJump = MathUtils.clamp(currentJump-GRAVITY, -9, 9);
+			
+			velocity.y = (float) currentJump;
+		}
+		
+		if(currentJump<0)
+			jumpState = JUMP_STATE.FALLING;
+		
 	}
 	
 	@Override

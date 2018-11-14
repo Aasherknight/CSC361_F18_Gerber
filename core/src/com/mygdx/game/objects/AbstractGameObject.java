@@ -50,31 +50,28 @@
 	 velocity.x = MathUtils.clamp(velocity.x,
 	 -terminalVelocity.x, terminalVelocity.x);
 	}
-	protected void updateMotionY (float deltaTime) {
+	protected void updateMotionY (float deltaTime) 
+	{
 		 if (velocity.y != 0) {
-		 // Apply friction
-		 if (velocity.y > 0) {
-		 velocity.y = Math.max(velocity.y - friction.y *
-		deltaTime, 0);
-		 } else {
-		 velocity.y = Math.min(velocity.y + friction.y *
-		deltaTime, 0);
+			 // Apply friction
+			 if (velocity.y > 0)
+				 velocity.y = Math.max(velocity.y - friction.y *deltaTime, 0);
+			 else
+				 velocity.y = Math.min(velocity.y + friction.y *deltaTime, 0);
 		 }
-	 }
-	 // Apply acceleration
-	 velocity.y += acceleration.y * deltaTime;
-	 // Make sure the object's velocity does not exceed the
-	 // positive or negative terminal velocity
-		 velocity.y = MathUtils.clamp(velocity.y, -
-				 terminalVelocity.y, terminalVelocity.y);
-				 }
+		 // Apply acceleration
+		 velocity.y += acceleration.y * deltaTime;
+		 // Make sure the object's velocity does not exceed the
+		 // positive or negative terminal velocity
+		 velocity.y = MathUtils.clamp(velocity.y, -terminalVelocity.y, terminalVelocity.y);
+	}
 	public void update (float deltaTime) 
 	{
 		updateMotionX(deltaTime);
-		 updateMotionY(deltaTime);
-		 // Move to new position
-		 position.x += velocity.x * deltaTime;
-		 position.y += velocity.y * deltaTime;
+		updateMotionY(deltaTime);
+		// Move to new position
+		position.x += velocity.x * deltaTime;
+		position.y += velocity.y * deltaTime;
 	}
 		public abstract void render (SpriteBatch batch);
 	}

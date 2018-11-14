@@ -59,48 +59,34 @@ public class WorldController extends InputAdapter
 	{
 		handleDebugInput(deltaTime);
 		//updateTestObjects(deltaTime);
+		handleInputGame(deltaTime);
+		level.update(deltaTime);
 		cameraHelper.update(deltaTime);
 	}
 	
-//	private void initTestObjects()
-//	{
-//		//array of 5 sprites
-//		testSprites = new Sprite[5];
-//		//list of texture regions
-//		Array<TextureRegion> regions = new Array<TextureRegion>();
-//		regions.add(Assets.instance.slimy.slimy);
-//		regions.add(Assets.instance.imp.imp);
-//		regions.add(Assets.instance.jelly.jelly);
-//		regions.add(Assets.instance.dividing_jelly.dividing_jelly);
-//		
-//		//create new sprites using the random texture region
-//		for(int i = 0; i < testSprites.length; i++)
-//		{
-//			Sprite spr = new Sprite(regions.random());
-//			spr.setSize(1, 1);
-//			//set origin for sprites center
-//			spr.setOrigin(spr.getWidth()/2.0f, spr.getHeight()/2.0f);
-//			//calculate random position for sprite
-//			float ranX = MathUtils.random(-2.0f, 2.0f);
-//			float ranY = MathUtils.random(-2.0f, 2.0f);
-//			spr.setPosition(ranX, ranY);
-//			
-//			//put the sprite we made into array
-//			testSprites[i] = spr;
-//		}
-//		//select the first sprite
-//		selectedSprite = 0;
-//	}
-//	
-//	private void updateTestObjects(float deltaTime)
-//	{
-//		float rotation = testSprites[selectedSprite].getRotation();
-//		
-//		rotation += 90*deltaTime;
-//		rotation %= 360;
-//		
-//		testSprites[selectedSprite].setRotation(rotation);
-//	}
+	/**
+	 * Called with Update.
+	 * Handles the input related the bunny head's movement
+	 * @param deltaTime
+	 */
+	private void handleInputGame(float deltaTime)
+	{
+		if (cameraHelper.hasTarget(level.slimy))
+		{
+			//Player Movement
+			if (Gdx.input.isKeyPressed(Keys.A))
+				level.slimy.velocity.x -= level.slimy.terminalVelocity.x;
+			else if (Gdx.input.isKeyPressed(Keys.D))
+				level.slimy.velocity.x += level.slimy.terminalVelocity.x;
+			
+			//slimy jump
+			if (Gdx.input.isKeyPressed(Keys.W))
+				level.slimy.jump(true);
+			else
+				level.slimy.jump(false);
+		}
+	}
+	
 
 	private void handleDebugInput(float deltaTime)
 	{
