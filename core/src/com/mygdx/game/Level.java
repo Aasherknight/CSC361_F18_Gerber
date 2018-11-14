@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.objects.AbstractGameObject;
 import com.mygdx.game.objects.Backdrop;
 import com.mygdx.game.objects.Ground;
+import com.mygdx.game.objects.SlimyCharacter;
 
 
 public class Level 
@@ -45,6 +46,8 @@ public class Level
 	
 	public Backdrop backdrop;
 	
+	public SlimyCharacter slimy;
+	
 	public Level (String filename)
 	{
 		init(filename);
@@ -52,11 +55,14 @@ public class Level
 	
 	public void update(float deltaTime)
 	{
-		
+		slimy.update(deltaTime);
+		for(Ground rock: ground)
+			rock.update(deltaTime);
 	}
 	
 	private void init(String filename)
 	{
+		slimy = null;
 		ground = new Array<Ground>();
 		
 		//load image file that represents the level data
@@ -109,6 +115,10 @@ public class Level
 				}
 				else if(BLOCK_TYPE.PLAYER_SPAWNPOINT.sameColor(currentPixel))
 				{
+					obj = new SlimyCharacter();
+					offsetHeight = -3.0f;
+					obj.position.set(pixelX, baseHeight * obj.dimension.y + offsetHeight);
+					slimy = (SlimyCharacter)obj;
 				}
 				else if(BLOCK_TYPE.IMP_SPAWNS.sameColor(currentPixel))
 				{
@@ -148,6 +158,7 @@ public class Level
 		for(Ground floor : ground)
 			floor.render(batch);	
 
+		slimy.render(batch);
 	}
 	
 }
