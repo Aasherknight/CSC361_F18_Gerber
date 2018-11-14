@@ -4,10 +4,10 @@ import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.math.Rectangle;
+import com.mygdx.game.objects.Ground;
+import com.mygdx.game.objects.SlimyCharacter;
+import com.mygdx.game.objects.SlimyCharacter.JUMP_STATE;
 import com.mygdx.game.util.CameraHelper;
 import com.mygdx.game.util.Constants;
 
@@ -29,6 +29,10 @@ public class WorldController extends InputAdapter
 	public Level level;
 	public int lives;
 	public int score;
+	
+	//rectangles for collision detection
+	private Rectangle r1 = new Rectangle();
+	private Rectangle r2 = new Rectangle();
 	
 	public WorldController()
 	{
@@ -61,6 +65,7 @@ public class WorldController extends InputAdapter
 		//updateTestObjects(deltaTime);
 		handleInputGame(deltaTime);
 		level.update(deltaTime);
+		checkCollision();
 		cameraHelper.update(deltaTime);
 	}
 	
@@ -139,11 +144,6 @@ public class WorldController extends InputAdapter
 		cameraHelper.setPosition(x,y);
 	}
 	
-//	private void moveSelectedSprite(float x, float y)
-//	{
-//		testSprites[selectedSprite].translate(x, y);
-//	}
-	
 	@Override
 	public boolean keyUp(int keycode)
 	{
@@ -169,5 +169,43 @@ public class WorldController extends InputAdapter
 //			Gdx.app.debug(TAG, "Camera follow enabled: " + cameraHelper.hasTarget());
 //		}
 		return false;
+	}
+
+	private void checkCollision()
+	{
+		r1.set(level.slimy.position.x, level.slimy.position.y,level.slimy.bounds.width, level.slimy.bounds.height);
+		
+		//testing for collisions with the ground
+		for(Ground ground: level.ground)
+		{
+			r2.set(ground.position.x,ground.position.y, ground.bounds.width,ground.bounds.height);
+			if(r1.overlaps(r2))
+				onCollisionSlimyWithGround(ground);
+		}
+	}
+	
+	private void onCollisionSlimyWithGround(Ground ground)
+	{
+		SlimyCharacter slimy = level.slimy;
+		
+		float heightDifference = Math.abs(slimy.position.y - (ground.position.y + ground.bounds.height));
+		
+		if(heightDifference> 0.15)
+		{
+			if(slimy.position.x > (ground.position.x + ground.bounds.width/2.0f))
+				slimy.position.x = ground.position.x + ground.bounds.width;
+			else
+				slimy.position.x = ground.position.x - ground.bounds.width;
+		}
+		
+		switch(slimy.jumpState)
+		{
+		case FALLING:
+			slimy.position.y = ground.position.y + slimy.bounds.height + slimy.origin.y;
+			slimy.jumpState = JUMP_STATE.GROUNDED;
+			break;
+		default:
+			break;
+		}
 	}
 }

@@ -31,6 +31,8 @@ public class Ground extends AbstractGameObject
 	public void setLength(int length)
 	{
 		this.length = length;
+		//collision box
+		bounds.set(0,0,dimension.x*length, dimension.y);
 	}
 	
 	public void increaseLength(int increment)
