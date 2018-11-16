@@ -55,6 +55,7 @@ public class WorldController extends InputAdapter
 		//initTestObjects();
 		lives = Constants.LIVES_START;
 		initLevel();
+		initPhysics();
 	}
 	
 	public void initLevel()
@@ -69,11 +70,12 @@ public class WorldController extends InputAdapter
 		if(b2world != null)
 			b2world.dispose();
 		b2world = new World(new Vector2(0, -9.81f), true);
+		BodyDef bodyDef = null;
 		//Rocks
 		Vector2 origin = new Vector2();
 		for(Ground ground : level.ground)
 		{
-			BodyDef bodyDef = new BodyDef();
+			bodyDef = new BodyDef();
 			bodyDef.type = BodyType.KinematicBody;
 			bodyDef.position.set(ground.position);
 			Body body = b2world.createBody(bodyDef);
@@ -84,6 +86,22 @@ public class WorldController extends InputAdapter
 			body.createFixture(fixtureDef);
 			polygonShape.dispose();
 		}
+		//slimy
+		bodyDef = new BodyDef();
+		bodyDef.type = BodyType.DynamicBody;
+		bodyDef.position.set(level.slimy.position);
+		
+		level.slimy.body = b2world.createBody(bodyDef);	
+
+		PolygonShape polygonShape = new PolygonShape();
+		polygonShape.setAsBox(level.slimy.regBody.getRegionWidth() * 0.75f, level.slimy.regBody.getRegionHeight()*0.75f);
+		FixtureDef fixtureDef = new FixtureDef();
+		fixtureDef.shape = polygonShape;
+		fixtureDef.density = 5;
+		fixtureDef.restitution = 0.25f;
+		fixtureDef.friction = 0.25f;
+		
+		level.slimy.body.createFixture(fixtureDef);
 	}
 	
 	/**
@@ -111,9 +129,9 @@ public class WorldController extends InputAdapter
 		{
 			//Player Movement
 			if (Gdx.input.isKeyPressed(Keys.A))
-				level.slimy.velocity.x -= level.slimy.terminalVelocity.x;
-			else if (Gdx.input.isKeyPressed(Keys.D))
-				level.slimy.velocity.x += level.slimy.terminalVelocity.x;
+				//move left
+			if (Gdx.input.isKeyPressed(Keys.D))
+				//move right
 			
 			//slimy jump
 			if (Gdx.input.isKeyPressed(Keys.W))
@@ -204,39 +222,11 @@ public class WorldController extends InputAdapter
 
 	private void checkCollision()
 	{
-		r1.set(level.slimy.position.x, level.slimy.position.y,level.slimy.bounds.width, level.slimy.bounds.height);
 		
-		//testing for collisions with the ground
-		for(Ground ground: level.ground)
-		{
-			r2.set(ground.position.x,ground.position.y, ground.bounds.width,ground.bounds.height);
-			if(r1.overlaps(r2))
-				onCollisionSlimyWithGround(ground);
-		}
 	}
 	
 	private void onCollisionSlimyWithGround(Ground ground)
 	{
-		SlimyCharacter slimy = level.slimy;
 		
-		float heightDifference = Math.abs(slimy.position.y - (ground.position.y + ground.bounds.height));
-		
-		if(heightDifference> 0.15)
-		{
-			if(slimy.position.x > (ground.position.x + ground.bounds.width/2.0f))
-				slimy.position.x = ground.position.x + ground.bounds.width;
-			else
-				slimy.position.x = ground.position.x - ground.bounds.width;
-		}
-		
-		switch(slimy.jumpState)
-		{
-		case FALLING:
-			slimy.position.y = ground.position.y + slimy.bounds.height + slimy.origin.y;
-			slimy.jumpState = JUMP_STATE.GROUNDED;
-			break;
-		default:
-			break;
-		}
 	}
 }

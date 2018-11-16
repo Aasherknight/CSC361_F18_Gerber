@@ -3,7 +3,12 @@ package com.mygdx.game.objects;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.mygdx.game.Assets;
+import com.mygdx.game.WorldController;
 
 public class SlimyCharacter extends AbstractGameObject
 {
@@ -16,7 +21,7 @@ public class SlimyCharacter extends AbstractGameObject
 	
 	public enum JUMP_STATE {GROUNDED, FALLING, JUMPING}
 	
-	private TextureRegion regBody;
+	public TextureRegion regBody;
 	
 	public VIEW_DIRECTION viewDirection;
 	public JUMP_STATE jumpState;
@@ -36,9 +41,7 @@ public class SlimyCharacter extends AbstractGameObject
 		
 		//center image on game object
 		origin.set(dimension.x/2, dimension.y/2);
-		
-		//bounding box for collision
-		
+				
 		//set physics
 		terminalVelocity.set(3.0f,4.0f);
 		friction.set(12.0f,0.0f);

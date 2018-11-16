@@ -24,7 +24,6 @@ public abstract class AbstractGameObject {
 		origin = new Vector2();
 		scale = new Vector2(1, 1);
 		rotation = 0;
-		velocity = new Vector2();
 		terminalVelocity = new Vector2(1,1);
 		friction = new Vector2();
 	}
@@ -43,8 +42,7 @@ public abstract class AbstractGameObject {
 		updateMotionX(deltaTime);
 		updateMotionY(deltaTime);
 		// Move to new position
-		position.x += velocity.x * deltaTime;
-		position.y += velocity.y * deltaTime;
+		
 	}
 	public abstract void render (SpriteBatch batch);
 }
