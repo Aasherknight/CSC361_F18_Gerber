@@ -5,6 +5,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.objects.Ground;
 import com.mygdx.game.objects.SlimyCharacter;
 import com.mygdx.game.objects.SlimyCharacter.JUMP_STATE;
@@ -34,6 +41,8 @@ public class WorldController extends InputAdapter
 	private Rectangle r1 = new Rectangle();
 	private Rectangle r2 = new Rectangle();
 	
+	public World b2world;
+	
 	public WorldController()
 	{
 		init();
@@ -53,6 +62,28 @@ public class WorldController extends InputAdapter
 		score = 0;
 		level = new Level(Constants.LEVEL_01);
 		cameraHelper.setTarget(level.slimy);
+	}
+	
+	public void initPhysics()
+	{
+		if(b2world != null)
+			b2world.dispose();
+		b2world = new World(new Vector2(0, -9.81f), true);
+		//Rocks
+		Vector2 origin = new Vector2();
+		for(Ground ground : level.ground)
+		{
+			BodyDef bodyDef = new BodyDef();
+			bodyDef.type = BodyType.KinematicBody;
+			bodyDef.position.set(ground.position);
+			Body body = b2world.createBody(bodyDef);
+			ground.body = body;
+			PolygonShape polygonShape = new PolygonShape();
+			FixtureDef fixtureDef = new FixtureDef();
+			fixtureDef.shape = polygonShape;
+			body.createFixture(fixtureDef);
+			polygonShape.dispose();
+		}
 	}
 	
 	/**

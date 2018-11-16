@@ -16,7 +16,7 @@ public class SlimyCharacter extends AbstractGameObject
 	
 	public enum JUMP_STATE {GROUNDED, FALLING, JUMPING}
 	
-	private TextureRegion body;
+	private TextureRegion regBody;
 	
 	public VIEW_DIRECTION viewDirection;
 	public JUMP_STATE jumpState;
@@ -32,18 +32,16 @@ public class SlimyCharacter extends AbstractGameObject
 	{
 		dimension.set(1,1);
 		
-		body = Assets.instance.slimy.slimy;
+		regBody = Assets.instance.slimy.slimy;
 		
 		//center image on game object
 		origin.set(dimension.x/2, dimension.y/2);
 		
 		//bounding box for collision
-		bounds.set(0,0,dimension.x,dimension.y);
 		
 		//set physics
 		terminalVelocity.set(3.0f,4.0f);
 		friction.set(12.0f,0.0f);
-		acceleration.set(0.0f, -25.0f);
 		
 		//view direction
 		viewDirection = VIEW_DIRECTION.RIGHT;
@@ -82,7 +80,7 @@ public class SlimyCharacter extends AbstractGameObject
 	public void update(float deltaTime)
 	{
 		super.update(deltaTime);
-		if(velocity.x < 0)
+		if(regBody !=null)
 			viewDirection = VIEW_DIRECTION.LEFT;
 		else
 			viewDirection = VIEW_DIRECTION.RIGHT;
@@ -97,8 +95,6 @@ public class SlimyCharacter extends AbstractGameObject
 		if(jumpState!=JUMP_STATE.GROUNDED)
 		{
 			currentJump = MathUtils.clamp(currentJump-GRAVITY, -9, 9);
-			
-			velocity.y = (float) currentJump;
 		}
 		
 		if(currentJump<0)
@@ -111,11 +107,11 @@ public class SlimyCharacter extends AbstractGameObject
 		TextureRegion reg = null;
 		
 		if(isRed())
-			body = Assets.instance.slimy.redSlimy;
+			regBody = Assets.instance.slimy.redSlimy;
 		else
-			body = Assets.instance.slimy.slimy;
+			regBody = Assets.instance.slimy.slimy;
 		
-		reg = body;
+		reg = regBody;
 		batch.draw(reg.getTexture(), position.x, position.y, origin.x, origin.y,
 			dimension.x, dimension.y, scale.x, scale.y, rotation,
 			reg.getRegionX(), reg.getRegionY(), reg.getRegionWidth(), reg.getRegionHeight(),
