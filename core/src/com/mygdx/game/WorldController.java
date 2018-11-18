@@ -71,8 +71,8 @@ public class WorldController extends InputAdapter
 			b2world.dispose();
 		b2world = new World(new Vector2(0, -9.81f), true);
 		BodyDef bodyDef = null;
-		//Rocks
 		Vector2 origin = new Vector2();
+		//Rocks
 		for(Ground ground : level.ground)
 		{
 			bodyDef = new BodyDef();
@@ -81,6 +81,9 @@ public class WorldController extends InputAdapter
 			Body body = b2world.createBody(bodyDef);
 			ground.body = body;
 			PolygonShape polygonShape = new PolygonShape();
+			origin.x = ground.bounds.width / 2.0f;
+			origin.y = ground.bounds.height / 2.0f;
+			polygonShape.setAsBox(ground.bounds.width / 2.0f, ground.bounds.height / 2.0f, origin, 0);
 			FixtureDef fixtureDef = new FixtureDef();
 			fixtureDef.shape = polygonShape;
 			body.createFixture(fixtureDef);
@@ -94,14 +97,19 @@ public class WorldController extends InputAdapter
 		level.slimy.body = b2world.createBody(bodyDef);	
 
 		PolygonShape polygonShape = new PolygonShape();
-		polygonShape.setAsBox(level.slimy.regBody.getRegionWidth() * 0.75f, level.slimy.regBody.getRegionHeight()*0.75f);
+		polygonShape.setAsBox(level.slimy.dimension.x/3.0f,level.slimy.dimension.x/3.0f, level.slimy.origin, 0);
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = polygonShape;
 		fixtureDef.density = 5;
 		fixtureDef.restitution = 0.25f;
 		fixtureDef.friction = 0.25f;
-		
 		level.slimy.body.createFixture(fixtureDef);
+		
+		polygonShape.dispose();
+//		
+		System.out.println("Number of bodies in b2world: " +b2world.getBodyCount());
+		System.out.println("Slimy body position: " + level.slimy.position);
+		System.out.println("Backdrop position: " + level.backdrop.origin);
 	}
 	
 	/**
@@ -110,6 +118,7 @@ public class WorldController extends InputAdapter
 	 */
 	public void update(float deltaTime)
 	{
+		
 		handleDebugInput(deltaTime);
 		//updateTestObjects(deltaTime);
 		handleInputGame(deltaTime);
@@ -144,8 +153,6 @@ public class WorldController extends InputAdapter
 
 	private void handleDebugInput(float deltaTime)
 	{
-		if(Gdx.app.getType() != ApplicationType.Desktop) return;
-		
 //		float sprMoveSpeed = 5*deltaTime;
 //		
 //		if (Gdx.input.isKeyPressed(Keys.A))

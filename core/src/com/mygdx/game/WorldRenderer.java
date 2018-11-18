@@ -62,7 +62,6 @@ public class WorldRenderer implements Disposable
 		batch.end();
 		if(DEBUG_DRAW_BOX2D_WORLD)
 			b2debugRenderer.render(worldController.b2world, camera.combined);
-		System.out.println("hi");
 	}
 	
 //	private void renderTestObjects()

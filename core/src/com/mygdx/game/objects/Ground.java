@@ -10,7 +10,7 @@ public class Ground extends AbstractGameObject
 	private TextureRegion edge;
 	private TextureRegion middle;
 	
-	private int length;
+	public int length;
 	
 	public Ground()
 	{
@@ -31,6 +31,8 @@ public class Ground extends AbstractGameObject
 	public void setLength(int length)
 	{
 		this.length = length;
+
+		bounds.set(0,0,dimension.x*length, dimension.y/4.0f);
 	}
 	
 	public void increaseLength(int increment)
@@ -67,7 +69,7 @@ public class Ground extends AbstractGameObject
 		//Draw right edge
 		reg = edge;
 		batch.draw(reg.getTexture(), position.x + relX, position.y + relY,
-				origin.x, origin.y, dimension.x, dimension.y, scale.x, scale.y,
+				origin.x, origin.y-0.2f, dimension.x, dimension.y, scale.x, scale.y,
 				rotation, reg.getRegionX(), reg.getRegionY(), reg.getRegionWidth(), 
 				reg.getRegionHeight(), true, false);
 	}

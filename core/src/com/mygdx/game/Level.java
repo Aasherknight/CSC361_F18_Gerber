@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.objects.AbstractGameObject;
 import com.mygdx.game.objects.Backdrop;
@@ -116,7 +117,7 @@ public class Level
 				else if(BLOCK_TYPE.PLAYER_SPAWNPOINT.sameColor(currentPixel))
 				{
 					obj = new SlimyCharacter();
-					offsetHeight = -3.0f;
+					offsetHeight = -4.5f;
 					obj.position.set(pixelX, baseHeight * obj.dimension.y + offsetHeight);
 					slimy = (SlimyCharacter)obj;
 				}
@@ -143,7 +144,9 @@ public class Level
 		
 		//decoration
 		backdrop = new Backdrop(pixmap.getWidth(),pixmap.getHeight());
+		backdrop.origin.set(new Vector2(0,-pixmap.getHeight()/2));
 		
+	
 		//free memory
 		pixmap.dispose();
 		Gdx.app.debug(TAG, "Level '" + filename + "' loaded");

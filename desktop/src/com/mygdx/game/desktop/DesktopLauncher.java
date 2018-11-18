@@ -19,7 +19,6 @@ public class DesktopLauncher
 			settings.maxWidth = 1024;
 			settings.maxHeight = 1024;
 			settings.duplicatePadding = false;
-			settings.debug = drawDebugOutline;
 			TexturePacker.process(settings, "../core/assets/art","../core/assets","slimy.atlas");
 		}
 		
