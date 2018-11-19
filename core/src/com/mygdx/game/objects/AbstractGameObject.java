@@ -14,7 +14,7 @@ public abstract class AbstractGameObject {
 	public float rotation;
 	public Vector2 V;
 	public Vector2 terminalVelocity;
-	public Vector2 friction;
+	public float friction;
 	public Rectangle bounds;
 	public Body body;
 	
@@ -26,13 +26,18 @@ public abstract class AbstractGameObject {
 		scale = new Vector2(1, 1);
 		rotation = 0;
 		terminalVelocity = new Vector2(1,1);
-		friction = new Vector2();
+		friction = 0.05f;
 		bounds = new Rectangle();
 	}
 	
 	protected void updateMotionX (float deltaTime) 
 	{
-
+		if(body.getLinearVelocity().x > 0)
+			body.setLinearVelocity(body.getLinearVelocity().x - friction, body.getLinearVelocity().y);
+		else if(body.getLinearVelocity().x < 0)
+			body.setLinearVelocity(body.getLinearVelocity().x + friction, body.getLinearVelocity().y);
+		
+		position.set(position.x + body.getLinearVelocity().x, position.y + body.getLinearVelocity().y);
 	}
 	
 	protected void updateMotionY (float deltaTime) 

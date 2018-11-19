@@ -138,9 +138,9 @@ public class WorldController extends InputAdapter
 		{
 			//Player Movement
 			if (Gdx.input.isKeyPressed(Keys.A))
-				//move left
+				level.slimy.body.setLinearVelocity(level.slimy.body.getLinearVelocity().x + .01f, level.slimy.body.getLinearVelocity().y);
 			if (Gdx.input.isKeyPressed(Keys.D))
-				//move right
+				level.slimy.body.setLinearVelocity(level.slimy.body.getLinearVelocity().x - .01f, level.slimy.body.getLinearVelocity().y);
 			
 			//slimy jump
 			if (Gdx.input.isKeyPressed(Keys.W))
