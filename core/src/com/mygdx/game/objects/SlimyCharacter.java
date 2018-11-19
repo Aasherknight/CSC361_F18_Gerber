@@ -1,21 +1,14 @@
 package com.mygdx.game.objects;
 
-import java.awt.desktop.SystemEventListener;
-
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Manifold;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.mygdx.game.Assets;
-import com.mygdx.game.WorldController;
 
 public class SlimyCharacter extends AbstractGameObject implements ContactListener
 {
@@ -172,14 +165,23 @@ public class SlimyCharacter extends AbstractGameObject implements ContactListene
 		Fixture fa = contact.getFixtureA(); //the object being hit
 		Fixture fb = contact.getFixtureB(); //should be the object colliding into b1
 		
-		System.out.println(fa.getBody().getType()+" has hit "+ fb.getBody().getType());		
+		if(fb.getBody() == body)
+		{
+			jumpState = JUMP_STATE.GROUNDED;
+			body.setLinearVelocity(body.getLinearVelocity().x,0);
+		}
 	}
 
 	@Override
     public void endContact(Contact contact) {
-        Fixture fixtureA = contact.getFixtureA();
-        Fixture fixtureB = contact.getFixtureB();
-        System.out.println(fixtureA.toString() + " and " + fixtureB.toString());
+        Fixture fa = contact.getFixtureA();
+        Fixture fb = contact.getFixtureB();
+        if(fb.getBody() == body && body.getLinearVelocity().y == 0)
+		{
+			jumpState = JUMP_STATE.FALLING;
+				
+		}
+
     }
 
 	@Override

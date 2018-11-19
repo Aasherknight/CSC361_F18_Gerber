@@ -7,12 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.ContactImpulse;
-import com.badlogic.gdx.physics.box2d.ContactListener;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.objects.Ground;
@@ -67,7 +62,8 @@ public class WorldController extends InputAdapter
 	{
 		if(b2world != null)
 			b2world.dispose();
-		b2world = new World(new Vector2(0, -9.81f), true);
+		b2world = new World(new Vector2(0, -0.05f), true);
+		
 		BodyDef bodyDef = null;
 		Vector2 origin = new Vector2();
 		//Rocks
@@ -76,6 +72,7 @@ public class WorldController extends InputAdapter
 			bodyDef = new BodyDef();
 			bodyDef.type = BodyType.KinematicBody;
 			bodyDef.position.set(ground.position);
+			bodyDef.fixedRotation = true;
 			Body body = b2world.createBody(bodyDef);
 			ground.body = body;
 			PolygonShape polygonShape = new PolygonShape();
@@ -84,6 +81,7 @@ public class WorldController extends InputAdapter
 			polygonShape.setAsBox(ground.bounds.width / 2.0f, ground.bounds.height / 2.0f, origin, 0);
 			FixtureDef fixtureDef = new FixtureDef();
 			fixtureDef.shape = polygonShape;
+			fixtureDef.density = 50;
 			body.createFixture(fixtureDef);
 			body.setAwake(true);
 			polygonShape.dispose();
@@ -92,6 +90,7 @@ public class WorldController extends InputAdapter
 		bodyDef = new BodyDef();
 		bodyDef.type = BodyType.DynamicBody;
 		bodyDef.position.set(level.slimy.position);
+		bodyDef.fixedRotation = true;
 		
 		level.slimy.body = b2world.createBody(bodyDef);	
 
@@ -105,6 +104,7 @@ public class WorldController extends InputAdapter
 		level.slimy.body.createFixture(fixtureDef);
 		polygonShape.dispose();
 		level.slimy.body.setAwake(true);
+		
 	}
 	
 	/**
@@ -113,12 +113,13 @@ public class WorldController extends InputAdapter
 	 */
 	public void update(float deltaTime)
 	{
-		
+		b2world.step(deltaTime, 6, 2);
 		handleDebugInput(deltaTime);
 		//updateTestObjects(deltaTime);
 		handleInputGame(deltaTime);
 		level.update(deltaTime);
 		cameraHelper.update(deltaTime);
+
 	}
 	
 	/**
