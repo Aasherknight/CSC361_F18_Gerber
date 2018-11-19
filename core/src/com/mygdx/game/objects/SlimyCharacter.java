@@ -50,7 +50,7 @@ public class SlimyCharacter extends AbstractGameObject
 		viewDirection = VIEW_DIRECTION.RIGHT;
 		
 		//jump state
-		jumpState = JUMP_STATE.GROUNDED;
+		jumpState = JUMP_STATE.FALLING;
 		currentJump = 0;
 		
 		timeRed = 0;
