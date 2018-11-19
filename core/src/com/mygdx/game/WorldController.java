@@ -3,8 +3,6 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -12,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -39,10 +38,6 @@ public class WorldController extends InputAdapter
 	public int lives;
 	public int score;
 	
-	//rectangles for collision detection
-	private Rectangle r1 = new Rectangle();
-	private Rectangle r2 = new Rectangle();
-	
 	public World b2world;
 	
 	public WorldController()
@@ -58,6 +53,7 @@ public class WorldController extends InputAdapter
 		lives = Constants.LIVES_START;
 		initLevel();
 		initPhysics();
+		b2world.setContactListener(level.slimy);
 	}
 	
 	public void initLevel()
@@ -89,6 +85,7 @@ public class WorldController extends InputAdapter
 			FixtureDef fixtureDef = new FixtureDef();
 			fixtureDef.shape = polygonShape;
 			body.createFixture(fixtureDef);
+			body.setAwake(true);
 			polygonShape.dispose();
 		}
 		//slimy
@@ -106,55 +103,8 @@ public class WorldController extends InputAdapter
 		fixtureDef.restitution = 0.25f;
 		fixtureDef.friction = 0.25f;
 		level.slimy.body.createFixture(fixtureDef);
-		
 		polygonShape.dispose();
-		
-		b2world.setContactListener(new ContactListener()
-				{
-
-					@Override
-					public void beginContact(Contact contact)
-					{
-						if(contact.getFixtureA().getBody() == level.slimy.body)
-						{
-							for(Ground ground : level.ground)
-								if(contact.getFixtureB().getBody() == ground.body)
-								{
-									level.slimy.currentJump = 0;
-								}
-						}
-						if(contact.getFixtureB().getBody() == level.slimy.body)
-						{
-							for(Ground ground : level.ground)
-								if(contact.getFixtureA().getBody() == ground.body)
-								{
-									level.slimy.currentJump = 0;
-								}
-						}
-					}
-
-					@Override
-					public void endContact(Contact contact)
-					{
-						// TODO Auto-generated method stub
-						
-					}
-
-					@Override
-					public void preSolve(Contact contact, Manifold oldManifold)
-					{
-						// TODO Auto-generated method stub
-						
-					}
-
-					@Override
-					public void postSolve(Contact contact, ContactImpulse impulse)
-					{
-						// TODO Auto-generated method stub
-						
-					}
-			
-				});
+		level.slimy.body.setAwake(true);
 	}
 	
 	/**
@@ -168,7 +118,6 @@ public class WorldController extends InputAdapter
 		//updateTestObjects(deltaTime);
 		handleInputGame(deltaTime);
 		level.update(deltaTime);
-		checkCollision();
 		cameraHelper.update(deltaTime);
 	}
 	
@@ -183,15 +132,13 @@ public class WorldController extends InputAdapter
 		{
 			//Player Movement
 			if (Gdx.input.isKeyPressed(Keys.A))
-				level.slimy.body.setLinearVelocity(MathUtils.clamp(level.slimy.body.getLinearVelocity().x + .01f,-1,1), level.slimy.body.getLinearVelocity().y);
+				level.slimy.moveLeft(deltaTime);
 			if (Gdx.input.isKeyPressed(Keys.D))
-				level.slimy.body.setLinearVelocity(MathUtils.clamp(level.slimy.body.getLinearVelocity().x - .01f,-1,1), level.slimy.body.getLinearVelocity().y);
+				level.slimy.moveRight(deltaTime);
 			
 			//slimy jump
 			if (Gdx.input.isKeyPressed(Keys.W))
-				level.slimy.jump(true);
-			else
-				level.slimy.jump(false);
+				level.slimy.jump(deltaTime);
 		}
 	}
 	
@@ -270,14 +217,5 @@ public class WorldController extends InputAdapter
 //			Gdx.app.debug(TAG, "Camera follow enabled: " + cameraHelper.hasTarget());
 //		}
 		return false;
-	}
-
-	private void checkCollision()
-	{
-	}
-	
-	private void onCollisionSlimyWithGround(Ground ground)
-	{
-		
 	}
 }
