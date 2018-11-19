@@ -1,20 +1,22 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.objects.Ground;
-import com.mygdx.game.objects.SlimyCharacter;
-import com.mygdx.game.objects.SlimyCharacter.JUMP_STATE;
 import com.mygdx.game.util.CameraHelper;
 import com.mygdx.game.util.Constants;
 
@@ -106,10 +108,53 @@ public class WorldController extends InputAdapter
 		level.slimy.body.createFixture(fixtureDef);
 		
 		polygonShape.dispose();
-//		
-		System.out.println("Number of bodies in b2world: " +b2world.getBodyCount());
-		System.out.println("Slimy body position: " + level.slimy.position);
-		System.out.println("Backdrop position: " + level.backdrop.origin);
+		
+		b2world.setContactListener(new ContactListener()
+				{
+
+					@Override
+					public void beginContact(Contact contact)
+					{
+						if(contact.getFixtureA().getBody() == level.slimy.body)
+						{
+							for(Ground ground : level.ground)
+								if(contact.getFixtureB().getBody() == ground.body)
+								{
+									level.slimy.currentJump = 0;
+								}
+						}
+						if(contact.getFixtureB().getBody() == level.slimy.body)
+						{
+							for(Ground ground : level.ground)
+								if(contact.getFixtureA().getBody() == ground.body)
+								{
+									level.slimy.currentJump = 0;
+								}
+						}
+					}
+
+					@Override
+					public void endContact(Contact contact)
+					{
+						// TODO Auto-generated method stub
+						
+					}
+
+					@Override
+					public void preSolve(Contact contact, Manifold oldManifold)
+					{
+						// TODO Auto-generated method stub
+						
+					}
+
+					@Override
+					public void postSolve(Contact contact, ContactImpulse impulse)
+					{
+						// TODO Auto-generated method stub
+						
+					}
+			
+				});
 	}
 	
 	/**
@@ -138,9 +183,9 @@ public class WorldController extends InputAdapter
 		{
 			//Player Movement
 			if (Gdx.input.isKeyPressed(Keys.A))
-				level.slimy.body.setLinearVelocity(level.slimy.body.getLinearVelocity().x + .01f, level.slimy.body.getLinearVelocity().y);
+				level.slimy.body.setLinearVelocity(MathUtils.clamp(level.slimy.body.getLinearVelocity().x + .01f,-1,1), level.slimy.body.getLinearVelocity().y);
 			if (Gdx.input.isKeyPressed(Keys.D))
-				level.slimy.body.setLinearVelocity(level.slimy.body.getLinearVelocity().x - .01f, level.slimy.body.getLinearVelocity().y);
+				level.slimy.body.setLinearVelocity(MathUtils.clamp(level.slimy.body.getLinearVelocity().x - .01f,-1,1), level.slimy.body.getLinearVelocity().y);
 			
 			//slimy jump
 			if (Gdx.input.isKeyPressed(Keys.W))
@@ -229,7 +274,6 @@ public class WorldController extends InputAdapter
 
 	private void checkCollision()
 	{
-		
 	}
 	
 	private void onCollisionSlimyWithGround(Ground ground)

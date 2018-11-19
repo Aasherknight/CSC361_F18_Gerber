@@ -15,7 +15,7 @@ public class SlimyCharacter extends AbstractGameObject
 	public static final String TAG = SlimyCharacter.class.getName();
 	
 	private final float JUMP_POWER = .75f;
-	private final double GRAVITY = 0.05;
+	private final float GRAVITY = 0.05f;
 	
 	public enum VIEW_DIRECTION {LEFT, RIGHT}
 	
@@ -65,6 +65,7 @@ public class SlimyCharacter extends AbstractGameObject
 				{
 					currentJump = JUMP_POWER;
 					jumpState = JUMP_STATE.JUMPING;
+					body.applyForceToCenter(0, currentJump, true);
 				}
 				break;
 			default:
@@ -94,15 +95,18 @@ public class SlimyCharacter extends AbstractGameObject
 	@Override
 	public void updateMotionY(float deltaTime)
 	{
-		
+		if(currentJump == 0)
+			jumpState = JUMP_STATE.GROUNDED;
 		if(jumpState!=JUMP_STATE.GROUNDED)
 		{
+			body.applyForceToCenter(0, -GRAVITY, true);
 			currentJump = (float) MathUtils.clamp(currentJump-GRAVITY, -1, 1);
+			
 		}
 		
 		if(currentJump<0)
 			jumpState = JUMP_STATE.FALLING;
-		position.set(position.x + body.getLinearVelocity().x, position.y + currentJump);
+		position.set(position.x + body.getLinearVelocity().x, position.y + body.getLinearVelocity().y);
 	}
 	
 	@Override
