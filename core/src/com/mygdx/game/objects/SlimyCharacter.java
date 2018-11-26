@@ -14,10 +14,9 @@ public class SlimyCharacter extends AbstractGameObject implements ContactListene
 {
 	public static final String TAG = SlimyCharacter.class.getName();
 	
-	private final float JUMP_POWER = 0.75f;
-	private final float GRAVITY = 0.05f;
-	private final float MOVE_SPEED = .15F;
-	private final float MAX_MOVE_SPEED = .5f;
+	private final float JUMP_POWER = 10f;
+	private final float MOVE_SPEED = 1.5F;
+	private final float MAX_MOVE_SPEED = 6f;
 	
 	public enum VIEW_DIRECTION {LEFT, RIGHT}
 	
@@ -111,36 +110,13 @@ public class SlimyCharacter extends AbstractGameObject implements ContactListene
 	@Override
 	public void updateMotionX(float deltaTime)
 	{
-		body.setAwake(true);
-		switch(viewDirection)
-		{
-		case LEFT:
-			body.setLinearVelocity(MathUtils.clamp(body.getLinearVelocity().x + friction, -MAX_MOVE_SPEED, 0), body.getLinearVelocity().y);
-			break;
-		case RIGHT:
-			body.setLinearVelocity(MathUtils.clamp(body.getLinearVelocity().x - friction, 0, MAX_MOVE_SPEED), body.getLinearVelocity().y);
-			break;
-		}
-		
-		position.x += body.getLinearVelocity().x;
-		body.setTransform(position.x, position.y, 0);
+		position.x = body.getPosition().x;
 	}
 	
 	@Override
 	public void updateMotionY(float deltaTime)
 	{
-		body.setAwake(true);
-		if(body.getLinearVelocity().y == 0)
-			jumpState = JUMP_STATE.GROUNDED;
-		if(jumpState!=JUMP_STATE.GROUNDED)
-		{
-			body.setLinearVelocity(body.getLinearVelocity().x,MathUtils.clamp(body.getLinearVelocity().y-GRAVITY, -1, 3));
-			position.y += body.getLinearVelocity().y;
-		}
-		if(body.getLinearVelocity().y<0)
-			jumpState = JUMP_STATE.FALLING;
-		
-		body.setTransform(position.x, position.y, 0);
+		position.y = body.getPosition().y;
 	}
 	
 	@Override

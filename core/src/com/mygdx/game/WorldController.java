@@ -62,7 +62,7 @@ public class WorldController extends InputAdapter
 	{
 		if(b2world != null)
 			b2world.dispose();
-		b2world = new World(new Vector2(0, -0.05f), true);
+		b2world = new World(new Vector2(0, -10f), true);
 		
 		BodyDef bodyDef = null;
 		Vector2 origin = new Vector2();
@@ -81,7 +81,7 @@ public class WorldController extends InputAdapter
 			polygonShape.setAsBox(ground.bounds.width / 2.0f, ground.bounds.height / 2.0f, origin, 0);
 			FixtureDef fixtureDef = new FixtureDef();
 			fixtureDef.shape = polygonShape;
-			fixtureDef.density = 50;
+			fixtureDef.density = 1;
 			body.createFixture(fixtureDef);
 			body.setAwake(true);
 			polygonShape.dispose();
@@ -98,9 +98,9 @@ public class WorldController extends InputAdapter
 		polygonShape.setAsBox(level.slimy.dimension.x/3.0f,level.slimy.dimension.x/3.0f, level.slimy.origin, 0);
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = polygonShape;
-		fixtureDef.density = 5;
-		fixtureDef.restitution = 0.25f;
-		fixtureDef.friction = 0.25f;
+		fixtureDef.density = 1;
+		fixtureDef.restitution = 0.1f;
+		fixtureDef.friction = 1f;
 		level.slimy.body.createFixture(fixtureDef);
 		polygonShape.dispose();
 		level.slimy.body.setAwake(true);
@@ -113,7 +113,7 @@ public class WorldController extends InputAdapter
 	 */
 	public void update(float deltaTime)
 	{
-		b2world.step(deltaTime, 6, 2);
+		b2world.step(deltaTime, 8, 3);
 		handleDebugInput(deltaTime);
 		//updateTestObjects(deltaTime);
 		handleInputGame(deltaTime);

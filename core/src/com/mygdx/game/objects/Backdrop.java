@@ -14,7 +14,6 @@ public class Backdrop extends AbstractGameObject
 	{
 		this.length = length;
 		this.height = height;
-		System.out.println("length: " + length + ";height: " + height);
 		
 		init();
 	}
