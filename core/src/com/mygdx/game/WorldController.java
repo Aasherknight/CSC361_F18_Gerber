@@ -62,7 +62,7 @@ public class WorldController extends InputAdapter
 	{
 		if(b2world != null)
 			b2world.dispose();
-		b2world = new World(new Vector2(0, -10f), true);
+		b2world = new World(new Vector2(0, -12f), true);
 		
 		BodyDef bodyDef = null;
 		Vector2 origin = new Vector2();
