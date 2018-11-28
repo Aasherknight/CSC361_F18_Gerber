@@ -42,8 +42,7 @@ public class MenuScreen extends AbstractGameScreen
 	//rebuilds all the layers for the final scene of the menu screen
 	private void rebuildStage()
 	{
-		skinSlimy = new Skin(Gdx.files.internal(Constants.TEXTURE_ATLAS_OBJECTS),
-				new TextureAtlas(Constants.TEXTURE_ATLAS_OBJECTS));
+		skinSlimy = new Skin(Gdx.files.internal(Constants.TEXTURE_ATLAS_OBJECTS));
 		
 		//build all layers
 		Table layerBackground = buildBackgroundLayer();

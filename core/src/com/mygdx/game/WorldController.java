@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
@@ -7,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
@@ -20,7 +22,7 @@ import com.mygdx.game.util.Constants;
  *
  */
 
-public class WorldController extends InputAdapter
+public class WorldController extends InputAdapter implements Disposable
 {
 	private static final String TAG = WorldController.class.getName();
 	
@@ -32,11 +34,13 @@ public class WorldController extends InputAdapter
 	public Level level;
 	public int lives;
 	public int score;
+	private Game game;
 	
 	public World b2world;
 	
-	public WorldController()
+	public WorldController(Game game)
 	{
+		this.game = game;
 		init();
 	}
 	
@@ -218,5 +222,12 @@ public class WorldController extends InputAdapter
 //			Gdx.app.debug(TAG, "Camera follow enabled: " + cameraHelper.hasTarget());
 //		}
 		return false;
+	}
+	
+	@Override
+	public void dispose()
+	{
+		if(b2world != null)
+			b2world.dispose();
 	}
 }
