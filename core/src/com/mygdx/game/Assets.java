@@ -4,8 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetErrorListener;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.Disposable;
@@ -24,6 +26,7 @@ public class Assets implements Disposable, AssetErrorListener
 	public AssetJelly jelly;
 	public AssetDividingJelly dividing_jelly;
 	public AssetCave cave;
+	public BitmapFont defaultNormal;
 	
 	private Assets() {}
 	
@@ -54,6 +57,10 @@ public class Assets implements Disposable, AssetErrorListener
 		jelly = new AssetJelly(atlas);
 		dividing_jelly = new AssetDividingJelly(atlas);
 		cave = new AssetCave(atlas);
+		defaultNormal = new BitmapFont(new FileHandle("../core/assets/arial-15.fnt"), true);
+		defaultNormal.getData().setScale(1.0f);
+		defaultNormal.getRegion().getTexture().setFilter(
+				 TextureFilter.Linear, TextureFilter.Linear);
 	}
 	
 	public void error(String filename, Class type, Throwable throwable)

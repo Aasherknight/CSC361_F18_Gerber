@@ -16,6 +16,7 @@ public class WorldRenderer implements Disposable
 {
 	private static final boolean DEBUG_DRAW_BOX2D_WORLD = true;
 	private OrthographicCamera camera;
+	private OrthographicCamera cameraGUI;
 	private SpriteBatch batch;
 	private WorldController worldController;
 	private Box2DDebugRenderer b2debugRenderer;
@@ -32,6 +33,10 @@ public class WorldRenderer implements Disposable
 		camera = new OrthographicCamera(Constants.VIEWPORT_WIDTH,Constants.VIEWPORT_HEIGHT);
 		camera.position.set(0,0,0);
 		camera.update();
+		cameraGUI = new OrthographicCamera(Constants.VIEWPORT_WIDTH,Constants.VIEWPORT_HEIGHT);
+		cameraGUI.position.set(0,0,0);
+		cameraGUI.setToOrtho(true);
+		cameraGUI.update();
 		b2debugRenderer = new Box2DDebugRenderer();
 	}
 	
@@ -39,12 +44,17 @@ public class WorldRenderer implements Disposable
 	{
 		//renderTestObjects();
 		renderWorld(batch);
+		renderGUI(batch);
 	}
 	
 	public void resize(int width, int height)
 	{
 		camera.viewportWidth = Constants.VIEWPORT_HEIGHT/height * width;
 		camera.update();
+		cameraGUI.viewportHeight = Constants.VIEWPORT_GUI_HEIGHT;
+		cameraGUI.viewportWidth = (Constants.VIEWPORT_GUI_WIDTH / (float)height) * (float)width;
+		cameraGUI.position.set(cameraGUI.viewportWidth/2, cameraGUI.viewportHeight/2, 0);
+		cameraGUI.update();				
 	}
 
 	@Override
@@ -62,6 +72,24 @@ public class WorldRenderer implements Disposable
 		batch.end();
 		if(DEBUG_DRAW_BOX2D_WORLD)
 			b2debugRenderer.render(worldController.b2world, camera.combined);
+	}
+	
+	private void renderGUI(SpriteBatch batch)
+	{
+		batch.setProjectionMatrix(cameraGUI.combined);
+		batch.begin();
+		
+		renderGUIJelly(batch);
+		
+		batch.end();
+	}
+	
+	private void renderGUIJelly(SpriteBatch batch)
+	{
+		float x = -15;
+		float y = -15;
+		batch.draw(Assets.instance.jelly.jelly, x, y, 50, 50, 100, 100, 0.35f, -0.35f, 0);
+		Assets.instance.defaultNormal.draw(batch, "" + worldController.score, x+75, y+37);
 	}
 	
 //	private void renderTestObjects()
