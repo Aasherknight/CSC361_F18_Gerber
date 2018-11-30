@@ -3,17 +3,18 @@ package com.mygdx.game.screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.mygdx.game.Assets;
 import com.mygdx.game.util.Constants;
+import com.mygdx.game.util.UIHelper;
 
 public class MenuScreen extends AbstractGameScreen
 {
@@ -21,7 +22,6 @@ public class MenuScreen extends AbstractGameScreen
 	private static final String TAG = MenuScreen.class.getName();
 	
 	private Stage stage;
-	private Skin skinSlimy;
 	
 	//menu
 	private Image imgBackground;
@@ -41,9 +41,7 @@ public class MenuScreen extends AbstractGameScreen
 	
 	//rebuilds all the layers for the final scene of the menu screen
 	private void rebuildStage()
-	{
-		skinSlimy = new Skin(Gdx.files.internal(Constants.TEXTURE_ATLAS_OBJECTS));
-		
+	{	
 		//build all layers
 		Table layerBackground = buildBackgroundLayer();
 		Table layerObjects = buildObjectsLayer();
@@ -67,7 +65,7 @@ public class MenuScreen extends AbstractGameScreen
 	{
 		Table layer = new Table();
 		// + Background
-		imgBackground = new Image(skinSlimy, "CaveBackdop");
+		imgBackground = new Image(Assets.instance.cave.backdrop);
 		layer.add(imgBackground);
 		return layer;
 	}
@@ -80,11 +78,11 @@ public class MenuScreen extends AbstractGameScreen
 	{
 		Table layer = new Table();
 		// + Coins
-		imgJelly = new Image(skinSlimy, "jelly");
+		imgJelly = new Image(Assets.instance.jelly.jelly);
 		layer.addActor(imgJelly);
 		imgJelly.setPosition(135, 80);
 		// + Bunny
-		imgSlimy = new Image(skinSlimy, "slimy");
+		imgSlimy = new Image(Assets.instance.slimy.slimy);
 		layer.addActor(imgSlimy);
 		imgSlimy.setPosition(355, 40);
 		return layer;
@@ -97,13 +95,15 @@ public class MenuScreen extends AbstractGameScreen
 	private Table buildControlsLayer()
 	{
 		Table layer = new Table();
+		UIHelper.addTexture("tempPlayButton", new Texture("tempPlayButton.png"));
+		
 		/**
 		 * Aaron Gerber - pg 247-248 changes
 		 */
 		//Set the layer to the bottom right
 		layer.right().bottom();
 		// add play button
-		btnMenuPlay = new Button(skinSlimy, "tempPlayButton");
+		btnMenuPlay = UIHelper.constructButton("tempPlayButton", "play");
 		layer.add(btnMenuPlay);
 		//give the play button something to do
 		btnMenuPlay.addListener(new ChangeListener()
@@ -173,7 +173,6 @@ public class MenuScreen extends AbstractGameScreen
 	@Override public void hide()
 	{
 		stage.dispose();
-		skinSlimy.dispose();
 	}
 	@Override public void pause() {}
 	

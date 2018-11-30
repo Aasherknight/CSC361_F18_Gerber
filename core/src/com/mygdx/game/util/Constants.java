@@ -18,10 +18,10 @@ public class Constants
 	//GUI height
 	public static final float VIEWPORT_GUI_HEIGHT = 480.0f;
 	
-	public static final String TEXTURE_ATLAS_OBJECTS = "../core/assets/slimy.atlas";
+	public static final String TEXTURE_ATLAS_OBJECTS = "slimy.atlas";//"slimy.atlas";
 	
 	//location for level 1's image
-	public static final String LEVEL_01 = "../core/assets/level01.png";
+	public static final String LEVEL_01 = "level01.png";
 	
 	//slimes only have one life
 	public static final int LIVES_START = 1;

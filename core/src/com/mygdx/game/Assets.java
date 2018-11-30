@@ -19,7 +19,7 @@ public class Assets implements Disposable, AssetErrorListener
 	
 	public static final Assets instance = new Assets();
 	
-	private AssetManager assetManager;
+	public AssetManager assetManager;
 
 	public AssetSlimy slimy;
 	public AssetImp imp;
@@ -27,6 +27,7 @@ public class Assets implements Disposable, AssetErrorListener
 	public AssetDividingJelly dividing_jelly;
 	public AssetCave cave;
 	public BitmapFont defaultNormal;
+	public AssetButton button;
 	
 	private Assets() {}
 	
@@ -61,6 +62,7 @@ public class Assets implements Disposable, AssetErrorListener
 		defaultNormal.getData().setScale(1.0f);
 		defaultNormal.getRegion().getTexture().setFilter(
 				 TextureFilter.Linear, TextureFilter.Linear);
+		button = new AssetButton(atlas);
 	}
 	
 	public void error(String filename, Class type, Throwable throwable)
@@ -137,6 +139,16 @@ public class Assets implements Disposable, AssetErrorListener
 			backdrop = atlas.findRegion("CaveBackdrop");
 			largeRocks = atlas.findRegion("CaveRocks1");
 			smallRocks = atlas.findRegion("CaveRocks2");
+		}
+	}
+	
+	public class AssetButton
+	{
+		public final AtlasRegion play;
+		
+		public AssetButton(TextureAtlas atlas)
+		{
+			play = atlas.findRegion("tempPlayButton");
 		}
 	}
 }
