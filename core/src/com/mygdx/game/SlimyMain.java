@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.mygdx.game.screens.MenuScreen;
+import com.mygdx.game.util.AudioManager;
 
 public class SlimyMain extends Game implements ApplicationListener
 {
@@ -19,6 +20,7 @@ public class SlimyMain extends Game implements ApplicationListener
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 		//load assets
 		Assets.instance.init(new AssetManager());
+		AudioManager.instance.play(Assets.instance.music.song01);
 		
 		// Start game at menu screen
 		setScreen(new MenuScreen(this));

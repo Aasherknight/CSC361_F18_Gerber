@@ -39,37 +39,51 @@ CaveRocks2
   orig: 320, 200
   offset: 0, 0
   index: -1
-dividingjelly
+Redmove1
   rotate: false
   xy: 132, 2
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-imp_stand
+Redmove2
   rotate: false
   xy: 776, 204
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-jelly
+dividingjelly
   rotate: false
   xy: 262, 2
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-redSlimy
+imp_stand
   rotate: false
   xy: 392, 2
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-slimy
+jelly
   rotate: false
   xy: 522, 2
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+jump2
+  rotate: false
+  xy: 652, 74
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+jump3
+  rotate: false
+  xy: 782, 74
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
@@ -80,6 +94,41 @@ size: 1024,512
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+move1
+  rotate: false
+  xy: 644, 354
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+move2
+  rotate: false
+  xy: 644, 224
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+redSlimy
+  rotate: false
+  xy: 774, 354
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+slimy
+  rotate: false
+  xy: 644, 94
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+smooshedslimy
+  rotate: false
+  xy: 774, 224
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
 tempPlayButton
   rotate: false
   xy: 2, 2

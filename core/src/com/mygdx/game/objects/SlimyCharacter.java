@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.mygdx.game.Assets;
+import com.mygdx.game.util.AudioManager;
 
 public class SlimyCharacter extends AbstractGameObject implements ContactListener
 {
@@ -65,6 +66,7 @@ public class SlimyCharacter extends AbstractGameObject implements ContactListene
 		{
 			case GROUNDED:
 				body.setLinearVelocity(body.getLinearVelocity().x,body.getLinearVelocity().y + JUMP_POWER);
+				AudioManager.instance.play(Assets.instance.sounds.jump);
 				jumpState = JUMP_STATE.JUMPING;
 				break;
 			default:

@@ -1,6 +1,8 @@
 package com.mygdx.game.objects;
 
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -17,6 +19,7 @@ public abstract class AbstractGameObject {
 	public float friction;
 	public Rectangle bounds;
 	public Body body;
+	public Animation<TextureRegion> animation;
 	
 	public AbstractGameObject () 
 	{

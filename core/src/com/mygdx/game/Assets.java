@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetErrorListener;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
@@ -29,6 +31,9 @@ public class Assets implements Disposable, AssetErrorListener
 	public BitmapFont defaultNormal;
 	public AssetButton button;
 	
+	public AssetSounds sounds;
+	public AssetMusic music;
+	
 	private Assets() {}
 	
 	public void init(AssetManager assetManager)
@@ -38,6 +43,10 @@ public class Assets implements Disposable, AssetErrorListener
 		assetManager.setErrorListener(this);
 		//load texture atlas
 		assetManager.load(Constants.TEXTURE_ATLAS_OBJECTS, TextureAtlas.class);
+		//loading sound and music
+		assetManager.load("sounds/jump.wav", Sound.class);
+		assetManager.load("music/caves_of_echoes.mp3",Music.class);
+		
 		//start loading assets and wait until finished
 		assetManager.finishLoading();
 		Gdx.app.debug(TAG, "# of assets loaded: " + assetManager.getAssetNames());
@@ -63,6 +72,8 @@ public class Assets implements Disposable, AssetErrorListener
 		defaultNormal.getRegion().getTexture().setFilter(
 				 TextureFilter.Linear, TextureFilter.Linear);
 		button = new AssetButton(atlas);
+		sounds = new AssetSounds(assetManager);
+		music = new AssetMusic(assetManager);
 	}
 	
 	public void error(String filename, Class type, Throwable throwable)
@@ -149,6 +160,26 @@ public class Assets implements Disposable, AssetErrorListener
 		public AssetButton(TextureAtlas atlas)
 		{
 			play = atlas.findRegion("tempPlayButton");
+		}
+	}
+	
+	public class AssetSounds
+	{
+		public final Sound jump;
+		
+		public AssetSounds (AssetManager am) 
+		 {
+			 jump = am.get("sounds/jump.wav", Sound.class);
+		 }
+	}
+	
+	public class AssetMusic
+	{
+		public final Music song01;
+		
+		public AssetMusic (AssetManager am)
+		{
+			song01 = am.get("music/caves_of_echoes.mp3",Music.class);
 		}
 	}
 }

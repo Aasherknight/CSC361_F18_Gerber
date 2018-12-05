@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.mygdx.game.Assets;
+import com.mygdx.game.util.AudioManager;
 import com.mygdx.game.util.Constants;
 import com.mygdx.game.util.UIHelper;
 
@@ -182,6 +183,7 @@ public class MenuScreen extends AbstractGameScreen
 	 */
 	private void onPlayClicked()
 	{
+		AudioManager.instance.stopMusic();
 		game.setScreen(new GameScreen(game));
 	}
 }
