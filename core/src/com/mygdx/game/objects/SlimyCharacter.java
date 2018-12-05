@@ -1,5 +1,7 @@
 package com.mygdx.game.objects;
 
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -8,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.Assets;
 import com.mygdx.game.util.AudioManager;
 
@@ -23,11 +26,19 @@ public class SlimyCharacter extends AbstractGameObject implements ContactListene
 	
 	public enum JUMP_STATE {GROUNDED, FALLING, JUMPING}
 	
+	public Animation<TextureRegion> moving;
+	public Animation<TextureRegion> redmoving;
+	
 	public TextureRegion regBody;
+	Array<TextureRegion> assets_moving;
+	Array<TextureRegion> assets_redmoving;
+	Array<TextureRegion> assets_jumping;
 	
 	private VIEW_DIRECTION viewDirection;
 	private JUMP_STATE jumpState;
 	private float timeRed;
+
+	private float stateTime;
 	
 	public SlimyCharacter()
 	{
@@ -39,6 +50,25 @@ public class SlimyCharacter extends AbstractGameObject implements ContactListene
 		dimension.set(1,1);
 		
 		regBody = Assets.instance.slimy.slimy;
+		
+		assets_moving = new Array<TextureRegion>();
+		assets_moving.add(Assets.instance.slimy.move01);
+		assets_moving.add(Assets.instance.slimy.move02);
+		
+		assets_redmoving = new Array<TextureRegion>();
+		assets_redmoving.add(Assets.instance.slimy.redmove01);
+		assets_redmoving.add(Assets.instance.slimy.redmove02);
+		
+		assets_jumping = new Array<TextureRegion>();
+		assets_moving.add(Assets.instance.slimy.jump01);
+		assets_moving.add(Assets.instance.slimy.jump02);
+		
+		moving = new Animation<TextureRegion>(0.25f, assets_moving);
+		moving.setPlayMode(PlayMode.LOOP);
+		redmoving = new Animation<TextureRegion>(0.25f, assets_redmoving);
+		redmoving.setPlayMode(PlayMode.LOOP);
+		
+		stateTime = 0;
 		
 		//center image on game object
 		origin.set(dimension.x/2, dimension.y/2);
@@ -106,7 +136,45 @@ public class SlimyCharacter extends AbstractGameObject implements ContactListene
 	{
 		super.update(deltaTime);
 		
+		if(isRed())
+		{
+			switch(jumpState)
+			{
+			case JUMPING:
+				regBody = Assets.instance.slimy.jump01;
+				break;
+			case FALLING:
+				regBody = Assets.instance.slimy.jump02;
+				break;
+			case GROUNDED:
+				if(body.getLinearVelocity().x!=0)
+					regBody = redmoving.getKeyFrame(stateTime);
+				else
+					regBody = Assets.instance.slimy.redslimy;
+				break;
+			}
+		}
+		else
+		{
+			switch(jumpState)
+			{
+			case JUMPING:
+				regBody = Assets.instance.slimy.jump01;
+				break;
+			case FALLING:
+				regBody = Assets.instance.slimy.jump02;
+				break;
+			case GROUNDED:
+				if(body.getLinearVelocity().x!=0)
+					regBody = moving.getKeyFrame(stateTime);
+				else
+					regBody = Assets.instance.slimy.slimy;
+				break;
+			}
+		}
+		
 		timeRed = MathUtils.clamp(timeRed - deltaTime, 0, 999);
+		stateTime += deltaTime;
 	}
 	
 	@Override
@@ -124,11 +192,6 @@ public class SlimyCharacter extends AbstractGameObject implements ContactListene
 	@Override
 	public void render(SpriteBatch batch) {
 		TextureRegion reg = null;
-		
-		if(isRed())
-			regBody = Assets.instance.slimy.redSlimy;
-		else
-			regBody = Assets.instance.slimy.slimy;
 		
 		reg = regBody;
 		batch.draw(reg.getTexture(), position.x, position.y, origin.x, origin.y,

@@ -19,7 +19,6 @@ public abstract class AbstractGameObject {
 	public float friction;
 	public Rectangle bounds;
 	public Body body;
-	public Animation<TextureRegion> animation;
 	
 	public AbstractGameObject () 
 	{
