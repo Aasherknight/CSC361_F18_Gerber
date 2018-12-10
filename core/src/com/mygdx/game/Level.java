@@ -8,8 +8,8 @@ import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.objects.AbstractGameObject;
 import com.mygdx.game.objects.Backdrop;
 import com.mygdx.game.objects.Ground;
+import com.mygdx.game.objects.Jelly;
 import com.mygdx.game.objects.SlimyCharacter;
-
 
 public class Level 
 {
@@ -44,6 +44,7 @@ public class Level
 	}
 	
 	public Array<Ground> ground;
+	public Array<Jelly> jelly;
 	
 	public Backdrop backdrop;
 	
@@ -65,6 +66,7 @@ public class Level
 	{
 		slimy = null;
 		ground = new Array<Ground>();
+		jelly = new Array<Jelly>();
 		
 		//load image file that represents the level data
 		Pixmap pixmap = new Pixmap(Gdx.files.internal(filename));
@@ -113,6 +115,10 @@ public class Level
 				}
 				else if(BLOCK_TYPE.JELLY.sameColor(currentPixel))
 				{
+					obj = new Jelly();
+					offsetHeight = -2.5f;
+					obj.position.set(pixelX, baseHeight * obj.dimension.y + offsetHeight);
+					jelly.add((Jelly)obj);
 				}
 				else if(BLOCK_TYPE.PLAYER_SPAWNPOINT.sameColor(currentPixel))
 				{
@@ -161,6 +167,9 @@ public class Level
 		for(Ground floor : ground)
 			floor.render(batch);	
 
+		for (Jelly plop : jelly)
+			plop.render(batch);
+		
 		slimy.render(batch);
 	}
 	
