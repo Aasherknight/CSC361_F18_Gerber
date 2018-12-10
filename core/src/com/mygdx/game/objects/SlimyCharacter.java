@@ -32,12 +32,12 @@ public class SlimyCharacter extends AbstractGameObject implements ContactListene
 	public TextureRegion regBody;
 	Array<TextureRegion> assets_moving;
 	Array<TextureRegion> assets_redmoving;
-	Array<TextureRegion> assets_jumping;
 	
 	private VIEW_DIRECTION viewDirection;
 	private JUMP_STATE jumpState;
 	private float timeRed;
 
+	private float timeFalling;
 	private float stateTime;
 	
 	public SlimyCharacter()
@@ -59,16 +59,13 @@ public class SlimyCharacter extends AbstractGameObject implements ContactListene
 		assets_redmoving.add(Assets.instance.slimy.redmove01);
 		assets_redmoving.add(Assets.instance.slimy.redmove02);
 		
-		assets_jumping = new Array<TextureRegion>();
-		assets_moving.add(Assets.instance.slimy.jump01);
-		assets_moving.add(Assets.instance.slimy.jump02);
-		
 		moving = new Animation<TextureRegion>(0.25f, assets_moving);
 		moving.setPlayMode(PlayMode.LOOP);
 		redmoving = new Animation<TextureRegion>(0.25f, assets_redmoving);
 		redmoving.setPlayMode(PlayMode.LOOP);
 		
 		stateTime = 0;
+		timeFalling = 0;
 		
 		//center image on game object
 		origin.set(dimension.x/2, dimension.y/2);
@@ -91,7 +88,6 @@ public class SlimyCharacter extends AbstractGameObject implements ContactListene
 	
 	public void jump(float deltaTime) 
 	{
-		body.setAwake(true);
 		switch(jumpState)
 		{
 			case GROUNDED:
@@ -144,7 +140,8 @@ public class SlimyCharacter extends AbstractGameObject implements ContactListene
 				regBody = Assets.instance.slimy.jump01;
 				break;
 			case FALLING:
-				regBody = Assets.instance.slimy.jump02;
+				if(timeFalling > 0.5)
+					regBody = Assets.instance.slimy.jump02;
 				break;
 			case GROUNDED:
 				if(body.getLinearVelocity().x!=0)
@@ -162,7 +159,8 @@ public class SlimyCharacter extends AbstractGameObject implements ContactListene
 				regBody = Assets.instance.slimy.jump01;
 				break;
 			case FALLING:
-				regBody = Assets.instance.slimy.jump02;
+				if(timeFalling > 0.5)
+					regBody = Assets.instance.slimy.jump02;
 				break;
 			case GROUNDED:
 				if(body.getLinearVelocity().x!=0)
@@ -173,6 +171,8 @@ public class SlimyCharacter extends AbstractGameObject implements ContactListene
 			}
 		}
 		
+		if(jumpState == JUMP_STATE.FALLING)
+			timeFalling += deltaTime;
 		timeRed = MathUtils.clamp(timeRed - deltaTime, 0, 999);
 		stateTime += deltaTime;
 	}
@@ -186,6 +186,8 @@ public class SlimyCharacter extends AbstractGameObject implements ContactListene
 	@Override
 	public void updateMotionY(float deltaTime)
 	{
+		if(body.getLinearVelocity().y < -0.5)
+			jumpState = JUMP_STATE.FALLING;
 		position.y = body.getPosition().y;
 	}
 	
@@ -206,7 +208,7 @@ public class SlimyCharacter extends AbstractGameObject implements ContactListene
 		Fixture fa = contact.getFixtureA(); //the object being hit
 		Fixture fb = contact.getFixtureB(); //should be the object colliding into b1
 		
-		if(fb.getBody() == body)
+		if(fb.getBody() == body || fa.getBody() == body)
 		{
 			jumpState = JUMP_STATE.GROUNDED;
 			body.setLinearVelocity(body.getLinearVelocity().x,0);
@@ -215,13 +217,12 @@ public class SlimyCharacter extends AbstractGameObject implements ContactListene
 
 	@Override
     public void endContact(Contact contact) {
-        Fixture fa = contact.getFixtureA();
-        Fixture fb = contact.getFixtureB();
-        if(fb.getBody() == body && body.getLinearVelocity().y == 0)
-		{
-			jumpState = JUMP_STATE.FALLING;
-				
-		}
+//        Fixture fa = contact.getFixtureA();
+//        Fixture fb = contact.getFixtureB();
+//        if(fb.getBody() == body && body.getLinearVelocity().y == 0)
+//		{
+//			jumpState = JUMP_STATE.FALLING;
+//		}
 
     }
 

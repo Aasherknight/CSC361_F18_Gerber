@@ -96,7 +96,7 @@ public class MenuScreen extends AbstractGameScreen
 	private Table buildControlsLayer()
 	{
 		Table layer = new Table();
-		UIHelper.addTexture("tempPlayButton", new Texture("tempPlayButton.png"));
+		UIHelper.addTexture("tempPlayButton", new Texture("art/tempPlayButton.png"));
 		
 		/**
 		 * Aaron Gerber - pg 247-248 changes
