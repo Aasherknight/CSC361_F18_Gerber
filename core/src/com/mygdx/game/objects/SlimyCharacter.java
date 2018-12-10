@@ -1,7 +1,10 @@
 package com.mygdx.game.objects;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -26,8 +29,10 @@ public class SlimyCharacter extends AbstractGameObject implements ContactListene
 	
 	public enum JUMP_STATE {GROUNDED, FALLING, JUMPING}
 	
-	public Animation<TextureRegion> moving;
-	public Animation<TextureRegion> redmoving;
+	private Animation<TextureRegion> moving;
+	private Animation<TextureRegion> redmoving;
+
+	private ParticleEffect slimeParticle;
 	
 	public TextureRegion regBody;
 	Array<TextureRegion> assets_moving;
@@ -66,6 +71,11 @@ public class SlimyCharacter extends AbstractGameObject implements ContactListene
 		
 		stateTime = 0;
 		timeFalling = 0;
+		
+		slimeParticle = new ParticleEffect();
+		
+		slimeParticle.load(new FileHandle("../core/assets/particles/dust.pfx"),
+				new FileHandle("../core/assets/particles"));
 		
 		//center image on game object
 		origin.set(dimension.x/2, dimension.y/2);
@@ -173,6 +183,9 @@ public class SlimyCharacter extends AbstractGameObject implements ContactListene
 		
 		if(jumpState == JUMP_STATE.FALLING)
 			timeFalling += deltaTime;
+		
+		slimeParticle.update(deltaTime);
+		
 		timeRed = MathUtils.clamp(timeRed - deltaTime, 0, 999);
 		stateTime += deltaTime;
 	}
@@ -180,6 +193,14 @@ public class SlimyCharacter extends AbstractGameObject implements ContactListene
 	@Override
 	public void updateMotionX(float deltaTime)
 	{
+		if(jumpState == JUMP_STATE.GROUNDED && body.getLinearVelocity().x != 0)
+		{
+			slimeParticle.setPosition(position.x + dimension.x / 2, position.y);
+			slimeParticle.start();
+		}
+		else
+			slimeParticle.allowCompletion();
+
 		position.x = body.getPosition().x;
 	}
 	
@@ -194,6 +215,8 @@ public class SlimyCharacter extends AbstractGameObject implements ContactListene
 	@Override
 	public void render(SpriteBatch batch) {
 		TextureRegion reg = null;
+
+		slimeParticle.draw(batch);
 		
 		reg = regBody;
 		batch.draw(reg.getTexture(), position.x, position.y, origin.x, origin.y,
