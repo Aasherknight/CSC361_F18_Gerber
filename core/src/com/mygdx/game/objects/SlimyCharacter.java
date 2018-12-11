@@ -17,7 +17,7 @@ import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.Assets;
 import com.mygdx.game.util.AudioManager;
 
-public class SlimyCharacter extends AbstractGameObject implements ContactListener
+public class SlimyCharacter extends AbstractGameObject
 {
 	public static final String TAG = SlimyCharacter.class.getName();
 	
@@ -195,7 +195,7 @@ public class SlimyCharacter extends AbstractGameObject implements ContactListene
 	{
 		if(jumpState == JUMP_STATE.GROUNDED && body.getLinearVelocity().x != 0)
 		{
-			slimeParticle.setPosition(position.x + dimension.x / 2, position.y);
+			slimeParticle.setPosition(position.x + dimension.x / 2, position.y + dimension.y /2);
 			slimeParticle.start();
 		}
 		else
@@ -225,39 +225,9 @@ public class SlimyCharacter extends AbstractGameObject implements ContactListene
 			viewDirection == VIEW_DIRECTION.LEFT, false);
 	}
 	
-	@Override
-	public void beginContact(Contact contact) 
+	public void setGrounded()
 	{
-		Fixture fa = contact.getFixtureA(); //the object being hit
-		Fixture fb = contact.getFixtureB(); //should be the object colliding into b1
-		
-		if(fb.getBody() == body || fa.getBody() == body)
-		{
-			jumpState = JUMP_STATE.GROUNDED;
+		jumpState = JUMP_STATE.GROUNDED;
 			body.setLinearVelocity(body.getLinearVelocity().x,0);
-		}
-	}
-
-	@Override
-    public void endContact(Contact contact) {
-//        Fixture fa = contact.getFixtureA();
-//        Fixture fb = contact.getFixtureB();
-//        if(fb.getBody() == body && body.getLinearVelocity().y == 0)
-//		{
-//			jumpState = JUMP_STATE.FALLING;
-//		}
-
-    }
-
-	@Override
-	public void preSolve(Contact contact, Manifold oldManifold) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void postSolve(Contact contact, ContactImpulse impulse) {
-		// TODO Auto-generated method stub
-		
 	}
 }

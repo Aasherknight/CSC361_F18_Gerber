@@ -8,11 +8,19 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.JointEdge;
+import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Disposable;
 import com.mygdx.game.objects.Ground;
+import com.mygdx.game.objects.Jelly;
 import com.mygdx.game.util.CameraHelper;
 import com.mygdx.game.util.Constants;
 
@@ -22,7 +30,7 @@ import com.mygdx.game.util.Constants;
  *
  */
 
-public class WorldController extends InputAdapter implements Disposable
+public class WorldController extends InputAdapter implements Disposable, ContactListener
 {
 	private static final String TAG = WorldController.class.getName();
 	
@@ -52,7 +60,7 @@ public class WorldController extends InputAdapter implements Disposable
 		lives = Constants.LIVES_START;
 		initLevel();
 		initPhysics();
-		b2world.setContactListener(level.slimy);
+		b2world.setContactListener(this);
 	}
 	
 	public void initLevel()
@@ -83,6 +91,25 @@ public class WorldController extends InputAdapter implements Disposable
 			origin.x = ground.bounds.width / 2.0f;
 			origin.y = ground.bounds.height / 2.0f;
 			polygonShape.setAsBox(ground.bounds.width / 2.0f, ground.bounds.height / 2.0f, origin, 0);
+			FixtureDef fixtureDef = new FixtureDef();
+			fixtureDef.shape = polygonShape;
+			fixtureDef.density = 1;
+			body.createFixture(fixtureDef);
+			body.setAwake(true);
+			polygonShape.dispose();
+		}
+		for(Jelly jelly : level.jelly)
+		{
+			bodyDef = new BodyDef();
+			bodyDef.type = BodyType.KinematicBody;
+			bodyDef.position.set(jelly.position);
+			bodyDef.fixedRotation = true;
+			Body body = b2world.createBody(bodyDef);
+			jelly.body = body;
+			PolygonShape polygonShape = new PolygonShape();
+			origin.x = jelly.bounds.width / 2.0f;
+			origin.y = jelly.bounds.height / 2.0f;
+			polygonShape.setAsBox(jelly.bounds.width / 2.0f, jelly.bounds.height / 2.0f, origin, 0);
 			FixtureDef fixtureDef = new FixtureDef();
 			fixtureDef.shape = polygonShape;
 			fixtureDef.density = 1;
@@ -229,5 +256,43 @@ public class WorldController extends InputAdapter implements Disposable
 	{
 		if(b2world != null)
 			b2world.dispose();
+	}
+
+	@Override
+	public void beginContact(Contact contact)
+	{
+		Fixture fa = contact.getFixtureA(); //the object being hit
+		Fixture fb = contact.getFixtureB(); //should be the object colliding into b1
+		
+		for(Ground ground : level.ground)
+			if(fb.getBody() == level.slimy.body && fa.getBody() == ground.body)
+				level.slimy.setGrounded();
+		for(Jelly jelly : level.jelly)
+			if(fb.getBody() == level.slimy.body && fa.getBody() == jelly.body)
+			{
+				jelly.collected = true;				
+				score += jelly.getScore();
+			}
+	}
+
+	@Override
+	public void endContact(Contact contact)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void preSolve(Contact contact, Manifold oldManifold)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void postSolve(Contact contact, ContactImpulse impulse)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 }
