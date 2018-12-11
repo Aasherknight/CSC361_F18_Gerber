@@ -19,6 +19,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import com.mygdx.game.objects.AbstractGameObject;
 import com.mygdx.game.objects.Ground;
 import com.mygdx.game.objects.Jelly;
 import com.mygdx.game.util.CameraHelper;
@@ -43,6 +44,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 	public int lives;
 	public int score;
 	private Game game;
+	private AbstractGameObject destroy;
 	
 	public World b2world;
 	
@@ -145,14 +147,20 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 	public void update(float deltaTime)
 	{
 		b2world.step(deltaTime, 8, 3);
+
+		if(destroy != null) 
+		{
+			b2world.destroyBody(destroy.body); 
+			destroy = null;
+		}
 		handleDebugInput(deltaTime);
 		//updateTestObjects(deltaTime);
 		handleInputGame(deltaTime);
 		level.update(deltaTime);
 		cameraHelper.update(deltaTime);
 
+		
 	}
-	
 	/**
 	 * Called with Update.
 	 * Handles the input related the bunny head's movement
@@ -270,7 +278,9 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 		for(Jelly jelly : level.jelly)
 			if(fb.getBody() == level.slimy.body && fa.getBody() == jelly.body)
 			{
-				jelly.collected = true;				
+				jelly.collected = true;	
+				
+				destroy = jelly;
 				score += jelly.getScore();
 			}
 	}
