@@ -4,17 +4,24 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.mygdx.game.Assets;
+import com.mygdx.game.WorldRenderer;
 import com.mygdx.game.util.AudioManager;
 import com.mygdx.game.util.Constants;
+import com.mygdx.game.util.HighScore;
 import com.mygdx.game.util.UIHelper;
 
 public class MenuScreen extends AbstractGameScreen
@@ -123,7 +130,7 @@ public class MenuScreen extends AbstractGameScreen
 		
 		return layer;
 	}
-
+	
 	/**
 	 * Draws the menu screen and debug lines if debug is activated
 	 * @param deltaTime
@@ -143,9 +150,27 @@ public class MenuScreen extends AbstractGameScreen
 				rebuildStage();
 			}
 		}
+		
+		
 		stage.act(deltaTime);
 		stage.draw();
 		stage.setDebugAll(debugEnabled); //needs to be variable so debug variable can be used
+		
+		SpriteBatch b = new SpriteBatch();
+		b.begin();
+		
+		HighScore.instance.load();
+		
+		Assets.instance.menuNormal.draw(b, "High Scores", 30, 215);
+		
+		int hsoffset = 0;
+		//build high scores
+		for(int score : HighScore.instance.scores)
+		{
+			Assets.instance.menuNormal.draw(b, "" + score, 30, 200 - hsoffset);
+			hsoffset += 15;
+		}
+		b.end();
 	}
 	
 	/**

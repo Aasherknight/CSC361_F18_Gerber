@@ -29,6 +29,7 @@ public class Assets implements Disposable, AssetErrorListener
 	public AssetDividingJelly dividing_jelly;
 	public AssetCave cave;
 	public BitmapFont defaultNormal;
+	public BitmapFont menuNormal;
 	public AssetButton button;
 	
 	public AssetSounds sounds;
@@ -70,6 +71,10 @@ public class Assets implements Disposable, AssetErrorListener
 		defaultNormal = new BitmapFont(new FileHandle("../core/assets/arial-15.fnt"), true);
 		defaultNormal.getData().setScale(1.0f);
 		defaultNormal.getRegion().getTexture().setFilter(
+				 TextureFilter.Linear, TextureFilter.Linear);
+		menuNormal = new BitmapFont(new FileHandle("../core/assets/arial-15.fnt"), false);
+		menuNormal.getData().setScale(1.0f);
+		menuNormal.getRegion().getTexture().setFilter(
 				 TextureFilter.Linear, TextureFilter.Linear);
 		button = new AssetButton(atlas);
 		sounds = new AssetSounds(assetManager);

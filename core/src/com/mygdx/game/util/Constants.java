@@ -20,6 +20,9 @@ public class Constants
 	
 	public static final String TEXTURE_ATLAS_OBJECTS = "slimy.atlas";//"slimy.atlas";
 	
+	//highscoreList
+	public static final String HIGHSCORES = "highscores.txt";
+	
 	//location for level 1's image
 	public static final String LEVEL_01 = "level01.png";
 	

@@ -1,5 +1,9 @@
 package com.mygdx.game;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -22,8 +26,10 @@ import com.badlogic.gdx.utils.Disposable;
 import com.mygdx.game.objects.AbstractGameObject;
 import com.mygdx.game.objects.Ground;
 import com.mygdx.game.objects.Jelly;
+import com.mygdx.game.screens.MenuScreen;
 import com.mygdx.game.util.CameraHelper;
 import com.mygdx.game.util.Constants;
+import com.mygdx.game.util.HighScore;
 
 /**
  * Controls how the world updates
@@ -44,6 +50,8 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 	public int lives;
 	public int score;
 	private Game game;
+	private float timeLeftGameOverDelay;
+	
 	private AbstractGameObject destroy;
 	
 	public World b2world;
@@ -63,6 +71,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 		initLevel();
 		initPhysics();
 		b2world.setContactListener(this);
+		timeLeftGameOverDelay = 1;
 	}
 	
 	public void initLevel()
@@ -158,9 +167,33 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 		handleInputGame(deltaTime);
 		level.update(deltaTime);
 		cameraHelper.update(deltaTime);
-
+		
+		if(isPlayerDead())
+		{
+			/**
+			 * Aaron Gerber
+			 * Adding this because it was missing. changes from pg 234
+			 */
+			if (timeLeftGameOverDelay > 0)
+			{
+				HighScore.instance.save(score);
+				timeLeftGameOverDelay = 0;
+			}
+			else
+				init();
+		}
 		
 	}
+
+	/**
+	 * Checks if the player is falling into the depths of the cave
+	 * @return true if players position is below -5 meters
+	 */
+	public boolean isPlayerDead()
+	{
+		return level.slimy.position.y < -5;
+	}
+	
 	/**
 	 * Called with Update.
 	 * Handles the input related the bunny head's movement
@@ -179,6 +212,10 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 			//slimy jump
 			if (Gdx.input.isKeyPressed(Keys.W))
 				level.slimy.jump(deltaTime);
+			
+			//print location
+			if(Gdx.input.isKeyJustPressed(Keys.SPACE))
+				System.out.println(level.slimy.position);
 		}
 	}
 	
