@@ -89,7 +89,10 @@ public class SlimyCharacter extends AbstractGameObject
 		timeRed = 0;
 	}
 	
-	public void setRed() {};
+	public void setRed()
+	{
+		timeRed += 5;
+	}
 	
 	public boolean isRed() 
 	{
@@ -108,11 +111,6 @@ public class SlimyCharacter extends AbstractGameObject
 			default:
 				break;
 		}
-	}
-	
-	public void hitStatic() 
-	{
-		body.setLinearVelocity(0,0);
 	}
 	
 	public void moveLeft(float deltaTime)

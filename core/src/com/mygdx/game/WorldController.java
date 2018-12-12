@@ -26,6 +26,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.mygdx.game.objects.AbstractGameObject;
 import com.mygdx.game.objects.Ground;
 import com.mygdx.game.objects.Jelly;
+import com.mygdx.game.objects.RedJelly;
 import com.mygdx.game.screens.MenuScreen;
 import com.mygdx.game.util.CameraHelper;
 import com.mygdx.game.util.Constants;
@@ -110,6 +111,25 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 			polygonShape.dispose();
 		}
 		for(Jelly jelly : level.jelly)
+		{
+			bodyDef = new BodyDef();
+			bodyDef.type = BodyType.KinematicBody;
+			bodyDef.position.set(jelly.position);
+			bodyDef.fixedRotation = true;
+			Body body = b2world.createBody(bodyDef);
+			jelly.body = body;
+			PolygonShape polygonShape = new PolygonShape();
+			origin.x = jelly.bounds.width / 2.0f;
+			origin.y = jelly.bounds.height / 2.0f;
+			polygonShape.setAsBox(jelly.bounds.width / 2.0f, jelly.bounds.height / 2.0f, origin, 0);
+			FixtureDef fixtureDef = new FixtureDef();
+			fixtureDef.shape = polygonShape;
+			fixtureDef.density = 1;
+			body.createFixture(fixtureDef);
+			body.setAwake(true);
+			polygonShape.dispose();
+		}
+		for(RedJelly jelly : level.redJelly)
 		{
 			bodyDef = new BodyDef();
 			bodyDef.type = BodyType.KinematicBody;
@@ -319,6 +339,15 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 				
 				destroy = jelly;
 				score += jelly.getScore();
+			}
+		for(RedJelly jelly : level.redJelly)
+			if(fb.getBody() == level.slimy.body && fa.getBody() == jelly.body)
+			{
+				jelly.collected = true;	
+				
+				destroy = jelly;
+				
+				level.slimy.setRed();
 			}
 	}
 
