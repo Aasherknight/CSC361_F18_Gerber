@@ -11,7 +11,7 @@ public class CameraHelper
 	private static final String TAG = CameraHelper.class.getName();
 	
 	private final float MAX_ZOOM_IN = 0.25f;
-	private final float MAX_ZOOM_OUT = 10.0f;
+	private final float MAX_ZOOM_OUT = 4.0f;
 	
 	private Vector2 position;
 	private float zoom;
@@ -20,7 +20,7 @@ public class CameraHelper
 	public CameraHelper ()
 	{
 		position = new Vector2();
-		zoom = 1.0f;
+		zoom = 2.0f;
 	}
 	
 	public void update (float deltaTime)

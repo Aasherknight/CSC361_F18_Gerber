@@ -45,7 +45,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 	public int lives;
 	public int score;
 	private Game game;
-	private float timeLeftGameOverDelay;
+	private boolean gameOver;
 	
 	private AbstractGameObject destroy;
 	
@@ -65,8 +65,8 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 		lives = Constants.LIVES_START;
 		initLevel();
 		initPhysics();
+		gameOver = false;
 		b2world.setContactListener(this);
-		timeLeftGameOverDelay = 1;
 	}
 	
 	public void initLevel()
@@ -161,6 +161,23 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 			body.setAwake(true);
 			polygonShape.dispose();
 		}
+		//dividing jelly
+		bodyDef = new BodyDef();
+		bodyDef.type = BodyType.KinematicBody;
+		bodyDef.position.set(level.dividingJelly.position);
+		bodyDef.fixedRotation = true;
+		Body body = b2world.createBody(bodyDef);
+		level.dividingJelly.body = body;
+		PolygonShape polygonShape = new PolygonShape();
+		origin.x = level.dividingJelly.bounds.width / 2.0f;
+		origin.y = level.dividingJelly.bounds.height / 2.0f;
+		polygonShape.setAsBox(level.dividingJelly.bounds.width / 2.0f, level.dividingJelly.bounds.height / 2.0f, origin, 0);
+		FixtureDef fixtureDef = new FixtureDef();
+		fixtureDef.shape = polygonShape;
+		fixtureDef.density = 1;
+		body.createFixture(fixtureDef);
+		body.setAwake(true);
+		polygonShape.dispose();
 		//slimy
 		bodyDef = new BodyDef();
 		bodyDef.type = BodyType.DynamicBody;
@@ -169,9 +186,9 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 		
 		level.slimy.body = b2world.createBody(bodyDef);	
 
-		PolygonShape polygonShape = new PolygonShape();
+		polygonShape = new PolygonShape();
 		polygonShape.setAsBox(level.slimy.dimension.x/3.0f,level.slimy.dimension.x/3.0f, level.slimy.origin, 0);
-		FixtureDef fixtureDef = new FixtureDef();
+		fixtureDef = new FixtureDef();
 		fixtureDef.shape = polygonShape;
 		fixtureDef.density = 1;
 		fixtureDef.restitution = 0.1f;
@@ -203,9 +220,14 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 		
 		if(isPlayerDead())
 		{
+			score -= 500;
 			gameOver();
 		}
-		
+		if(gameOver)
+		{
+			HighScore.instance.save(score);
+			init();
+		}
 	}
 
 	/**
@@ -370,16 +392,24 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 					return;
 				}
 				else
+				{
 					gameOver();
+					score -= 1000;
+					return;
+				}
 			}
+		}
+		if(fb.getBody() == level.slimy.body && fa.getBody() == level.dividingJelly.body)
+		{
+			score += 1000;
+			gameOver();
+			return;
 		}
 	}
 
 	private void gameOver()
 	{
-		score -= 1000;
-		HighScore.instance.save(score);
-		init();
+		gameOver = true;
 	}
 
 	@Override

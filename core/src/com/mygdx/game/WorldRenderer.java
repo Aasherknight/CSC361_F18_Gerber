@@ -14,7 +14,7 @@ import com.mygdx.game.util.Constants;
 
 public class WorldRenderer implements Disposable
 {
-	private static final boolean DEBUG_DRAW_BOX2D_WORLD = true;
+	private static final boolean DEBUG_DRAW_BOX2D_WORLD = false;
 	private OrthographicCamera camera;
 	private OrthographicCamera cameraGUI;
 	private SpriteBatch batch;
