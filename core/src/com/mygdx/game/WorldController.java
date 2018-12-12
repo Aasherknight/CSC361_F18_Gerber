@@ -1,9 +1,5 @@
 package com.mygdx.game;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.RandomAccessFile;
-
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -17,17 +13,15 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.JointEdge;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.mygdx.game.objects.AbstractGameObject;
 import com.mygdx.game.objects.Ground;
+import com.mygdx.game.objects.Imp;
 import com.mygdx.game.objects.Jelly;
 import com.mygdx.game.objects.RedJelly;
-import com.mygdx.game.screens.MenuScreen;
 import com.mygdx.game.util.CameraHelper;
 import com.mygdx.game.util.Constants;
 import com.mygdx.game.util.HighScore;
@@ -148,6 +142,25 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 			body.setAwake(true);
 			polygonShape.dispose();
 		}
+		for(Imp imp : level.imps)
+		{
+			bodyDef = new BodyDef();
+			bodyDef.type = BodyType.KinematicBody;
+			bodyDef.position.set(imp.position);
+			bodyDef.fixedRotation = true;
+			Body body = b2world.createBody(bodyDef);
+			imp.body = body;
+			PolygonShape polygonShape = new PolygonShape();
+			origin.x = imp.bounds.width / 2.0f;
+			origin.y = imp.bounds.height / 2.0f;
+			polygonShape.setAsBox(imp.bounds.width / 2.0f, imp.bounds.height / 2.0f, origin, 0);
+			FixtureDef fixtureDef = new FixtureDef();
+			fixtureDef.shape = polygonShape;
+			fixtureDef.density = 1;
+			body.createFixture(fixtureDef);
+			body.setAwake(true);
+			polygonShape.dispose();
+		}
 		//slimy
 		bodyDef = new BodyDef();
 		bodyDef.type = BodyType.DynamicBody;
@@ -200,7 +213,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 				timeLeftGameOverDelay = 0;
 			}
 			else
-				init();
+				gameOver();
 		}
 		
 	}
@@ -331,7 +344,10 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 		
 		for(Ground ground : level.ground)
 			if(fb.getBody() == level.slimy.body && fa.getBody() == ground.body)
+			{
 				level.slimy.setGrounded();
+				return;
+			}
 		for(Jelly jelly : level.jelly)
 			if(fb.getBody() == level.slimy.body && fa.getBody() == jelly.body)
 			{
@@ -339,6 +355,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 				
 				destroy = jelly;
 				score += jelly.getScore();
+				return;
 			}
 		for(RedJelly jelly : level.redJelly)
 			if(fb.getBody() == level.slimy.body && fa.getBody() == jelly.body)
@@ -348,7 +365,29 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 				destroy = jelly;
 				
 				level.slimy.setRed();
+				return;
 			}
+		for(Imp imp : level.imps)
+		{
+			if(fb.getBody() == level.slimy.body && fa.getBody() == imp.body)
+			{
+				if(level.slimy.isRed())
+				{
+					destroy = imp;
+					level.imps.removeValue(imp, true);
+					
+					score += 500;
+					return;
+				}
+				else
+					gameOver();
+			}
+		}
+	}
+
+	private void gameOver()
+	{
+		init();
 	}
 
 	@Override
