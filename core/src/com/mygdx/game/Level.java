@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.objects.AbstractGameObject;
 import com.mygdx.game.objects.Backdrop;
 import com.mygdx.game.objects.Ground;
+import com.mygdx.game.objects.Imp;
 import com.mygdx.game.objects.Jelly;
 import com.mygdx.game.objects.RedJelly;
 import com.mygdx.game.objects.SlimyCharacter;
@@ -47,6 +48,7 @@ public class Level
 	public Array<Ground> ground;
 	public Array<Jelly> jelly;
 	public Array<RedJelly> redJelly;
+	public Array<Imp> imps;
 	
 	public Backdrop backdrop;
 	
@@ -70,6 +72,7 @@ public class Level
 		ground = new Array<Ground>();
 		jelly = new Array<Jelly>();
 		redJelly = new Array<RedJelly>();
+		imps = new Array<Imp>();
 		
 		//load image file that represents the level data
 		Pixmap pixmap = new Pixmap(Gdx.files.internal(filename));
@@ -132,6 +135,10 @@ public class Level
 				}
 				else if(BLOCK_TYPE.IMP_SPAWNS.sameColor(currentPixel))
 				{
+					obj = new Imp();
+					offsetHeight = -1.5f;
+					obj.position.set(pixelX+2.5f, baseHeight * obj.dimension.y + offsetHeight);
+					imps.add((Imp)obj);
 				}
 				else if(BLOCK_TYPE.GOAL.sameColor(currentPixel))
 				{
@@ -179,6 +186,9 @@ public class Level
 		
 		for (RedJelly plop : redJelly)
 			plop.render(batch);
+		
+		for(Imp imp : imps)
+			imp.render(batch);
 		
 		slimy.render(batch);
 	}

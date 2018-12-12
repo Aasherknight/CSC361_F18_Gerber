@@ -145,11 +145,11 @@ public class SlimyCharacter extends AbstractGameObject
 			switch(jumpState)
 			{
 			case JUMPING:
-				regBody = Assets.instance.slimy.jump01;
+				regBody = Assets.instance.slimy.redjump01;
 				break;
 			case FALLING:
 				if(timeFalling > 0.5)
-					regBody = Assets.instance.slimy.jump02;
+					regBody = Assets.instance.slimy.redjump02;
 				break;
 			case GROUNDED:
 				if(body.getLinearVelocity().x!=0)

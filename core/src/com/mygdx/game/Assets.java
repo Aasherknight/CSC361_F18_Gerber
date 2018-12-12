@@ -108,6 +108,8 @@ public class Assets implements Disposable, AssetErrorListener
 		public final AtlasRegion move02;
 		public final AtlasRegion redmove01;
 		public final AtlasRegion redmove02;
+		public final AtlasRegion redjump01;
+		public final AtlasRegion redjump02;
 		public final AtlasRegion jump01;
 		public final AtlasRegion jump02;
 		
@@ -119,6 +121,8 @@ public class Assets implements Disposable, AssetErrorListener
 			move02 = atlas.findRegion("move2");
 			redmove01 = atlas.findRegion("Redmove1");
 			redmove02 = atlas.findRegion("Redmove2");
+			redjump01 = atlas.findRegion("redjump3");
+			redjump02 = atlas.findRegion("redjump2");
 			jump01 = atlas.findRegion("jump3");
 			jump02 = atlas.findRegion("jump2");
 		}

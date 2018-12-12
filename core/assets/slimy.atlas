@@ -95,6 +95,20 @@ redJelly
   orig: 32, 32
   offset: 0, 0
   index: -1
+redjump2
+  rotate: false
+  xy: 652, 74
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+redjump3
+  rotate: false
+  xy: 906, 334
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
 
 slimy2.png
 size: 1024,512
