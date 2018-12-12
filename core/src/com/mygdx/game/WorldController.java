@@ -203,17 +203,7 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 		
 		if(isPlayerDead())
 		{
-			/**
-			 * Aaron Gerber
-			 * Adding this because it was missing. changes from pg 234
-			 */
-			if (timeLeftGameOverDelay > 0)
-			{
-				HighScore.instance.save(score);
-				timeLeftGameOverDelay = 0;
-			}
-			else
-				gameOver();
+			gameOver();
 		}
 		
 	}
@@ -387,6 +377,8 @@ public class WorldController extends InputAdapter implements Disposable, Contact
 
 	private void gameOver()
 	{
+		score -= 1000;
+		HighScore.instance.save(score);
 		init();
 	}
 
