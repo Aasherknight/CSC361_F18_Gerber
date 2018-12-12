@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.objects.AbstractGameObject;
 import com.mygdx.game.objects.Backdrop;
+import com.mygdx.game.objects.DividingJelly;
 import com.mygdx.game.objects.Ground;
 import com.mygdx.game.objects.Imp;
 import com.mygdx.game.objects.Jelly;
@@ -53,6 +54,7 @@ public class Level
 	public Backdrop backdrop;
 	
 	public SlimyCharacter slimy;
+	public DividingJelly dividingJelly;
 	
 	public Level (String filename)
 	{
@@ -142,6 +144,10 @@ public class Level
 				}
 				else if(BLOCK_TYPE.GOAL.sameColor(currentPixel))
 				{
+					obj = new DividingJelly();
+					offsetHeight = -2.5f;
+					obj.position.set(pixelX, baseHeight * obj.dimension.y + offsetHeight);
+					dividingJelly = ((DividingJelly)obj);
 				}
 				else if(BLOCK_TYPE.REDJELLY.sameColor(currentPixel))
 				{
@@ -189,6 +195,8 @@ public class Level
 		
 		for(Imp imp : imps)
 			imp.render(batch);
+		
+		dividingJelly.render(batch);
 		
 		slimy.render(batch);
 	}
