@@ -27,6 +27,7 @@ public class Assets implements Disposable, AssetErrorListener
 	public AssetImp imp;
 	public AssetJelly jelly;
 	public AssetDividingJelly dividing_jelly;
+	public AssetRedJelly redJelly;
 	public AssetCave cave;
 	public BitmapFont defaultNormal;
 	public BitmapFont menuNormal;
@@ -66,6 +67,7 @@ public class Assets implements Disposable, AssetErrorListener
 		slimy = new AssetSlimy(atlas);
 		imp = new AssetImp(atlas);
 		jelly = new AssetJelly(atlas);
+		redJelly = new AssetRedJelly(atlas);
 		dividing_jelly = new AssetDividingJelly(atlas);
 		cave = new AssetCave(atlas);
 		defaultNormal = new BitmapFont(new FileHandle("../core/assets/arial-15.fnt"), true);
@@ -139,6 +141,16 @@ public class Assets implements Disposable, AssetErrorListener
 		public AssetJelly(TextureAtlas atlas)
 		{
 			jelly = atlas.findRegion("jelly");
+		}
+	}
+	
+	public class AssetRedJelly
+	{
+		public final AtlasRegion redJelly;
+		
+		public AssetRedJelly(TextureAtlas atlas)
+		{
+			redJelly = atlas.findRegion("redJelly");
 		}
 	}
 	
